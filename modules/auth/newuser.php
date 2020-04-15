@@ -134,15 +134,15 @@ if (!isset($submit)) {
 	// registration
 	$registration_errors = array();
 
-	if (preg_match("/[^A-Za-z0-9]/", $uname) or preg_match("/[^A-Za-z0-9]/", $nom_form) or 
-	preg_match("/[^A-Za-z0-9]/", $prenom_form) or preg_match("/[^0-9]/", $am) ){
+	if (preg_match("/[^A-Za-z0-9]/", $uname) or preg_match("/(^EL)[^A-Za-z0-9]/", $nom_form) or 
+	preg_match("/(^EL)[^A-Za-z0-9]/", $prenom_form) or preg_match("/[^0-9]/", $am) ){
 		$registration_errors[] = $langInvalidInputInUserReg;
 	}
 
 	$email = filter_var($email , FILTER_SANITIZE_EMAIL);
 	$uname = preg_replace("/[^A-Za-z0-9]/", '', $uname);
-	$nom_form = preg_replace("/[^A-Za-z0-9]/", '', $nom_form);
-	$prenom_form = preg_replace("/[^A-Za-z0-9]/", '', $prenom_form);
+	$nom_form = preg_replace("/(^EL)[^A-Za-z0-9]/", '', $nom_form);
+	$prenom_form = preg_replace("/(^EL)[^A-Za-z0-9]/", '', $prenom_form);
 	$am = preg_replace("/[^0-9]/", '', $am);
 
 
@@ -222,9 +222,9 @@ if (!isset($submit)) {
 	(user_id, nom, prenom, username, password, email, statut, department, am, registered_at, expires_at, lang)
 	VALUES ('NULL', '$nom_form', '$prenom_form', '$uname', '$password_encrypted', '$email','5',
 		'$department','$am',".$registered_at.",".$expires_at.",'$lang')";
-	// $inscr_user = mysql_query($q1);
-	// $last_id = mysql_insert_id();
-	// $result=mysql_query("SELECT user_id, nom, prenom FROM `$mysqlMainDb`.user WHERE user_id='$last_id'");
+	$inscr_user = mysql_query($q1);
+	$last_id = mysql_insert_id();
+	$result=mysql_query("SELECT user_id, nom, prenom FROM `$mysqlMainDb`.user WHERE user_id='$last_id'");
 	// $prenom_form = filter_var ( $prenom_form , FILTER_SANITIZE_STRING ,FILTER_FLAG_STRIP_HIGH | FILTER_FLAG_STRIP_LOW );
 	
 	// die;
