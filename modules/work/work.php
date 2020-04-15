@@ -185,16 +185,38 @@ if ($is_adminOfCourse) {
 	}
 } else {
 	if (isset($id)) {
-		if (isset($work_submit)) {
-			$nameTools = $m['SubmissionStatusWorkInfo'];
-			$navigation[] = array("url"=>"work.php", "name"=> $langWorks);
-			$navigation[] = array("url"=>"work.php?id=$id", "name"=>$m['WorkView']);
-			submit_work($id);
-		} else {
-			$nameTools = $m['WorkView'];
-			$navigation[] = array("url"=>"work.php", "name"=> $langWorks);
-			show_student_assignment($id);
+
+		if (preg_match("/[^0-9]/", $id)){
+			unset($id);
+			show_student_assignments();
 		}
+		else {
+				
+			$id = preg_replace("/[^0-9]/", '', $id);
+
+			// echo $id;
+			$res = db_query("SELECT *, (TO_DAYS(deadline) - TO_DAYS(NOW())) AS days
+			FROM assignments WHERE id = '$id'");
+			$row = mysql_fetch_array($res);
+
+			if (count($row) <= 1){
+				show_student_assignments();
+			}
+			else {
+				if (isset($work_submit)) {
+					$nameTools = $m['SubmissionStatusWorkInfo'];
+					$navigation[] = array("url"=>"work.php", "name"=> $langWorks);
+					$navigation[] = array("url"=>"work.php?id=$id", "name"=>$m['WorkView']);
+					submit_work($id);
+				} else {
+					$nameTools = $m['WorkView'];
+					$navigation[] = array("url"=>"work.php", "name"=> $langWorks);
+					show_student_assignment($id);
+				}
+			}
+
+		}
+		
 	} else {
 		show_student_assignments();
 	}
@@ -569,6 +591,14 @@ function show_student_assignment($id)
 	$res = db_query("SELECT *, (TO_DAYS(deadline) - TO_DAYS(NOW())) AS days
 		FROM assignments WHERE id = '$id'");
 	$row = mysql_fetch_array($res);
+
+	// if (count($row) > 1){
+	// 	echo $row['id'];
+	// 	echo "\nSHOWN\n";
+	// }
+	// echo count($row);
+
+
 
 	$nav[] = array("url"=>"work.php", "name"=> $langWorks);
 
