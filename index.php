@@ -147,7 +147,7 @@ if (isset($_SESSION['shib_uname'])) { // authenticate via shibboleth
 			}
 		} else {
 			
-			$n=16; 
+			$n=25; 
 			$fakepwd = get_rand_pwd($n);
 			// $tokHash = md5($fakepwd);
 			$_SESSION['tok'] = $fakepwd;
