@@ -152,7 +152,7 @@ if (isset($_SESSION['shib_uname'])) { // authenticate via shibboleth
 			$tokHash = md5($fakepwd);
 			$_SESSION['tok'] = $tokHash;
 
-			echo $tokHash;
+			// echo $tokHash;
 			$warning = '';
 			$log='yes';
 			$_SESSION['nom'] = $nom;
