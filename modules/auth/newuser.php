@@ -125,7 +125,8 @@ if (!isset($submit)) {
 	</tr>
 	</thead>
 	</table>
-	</form>";
+    </form>";
+    
 } else {
 
 	// echo $uname . " " . $email . " " . $nom_form . " " . $prenom_form . " " . $am;
@@ -134,16 +135,16 @@ if (!isset($submit)) {
 	// registration
 	$registration_errors = array();
 
-	if (preg_match("/[^A-Za-z0-9]/", $uname) or preg_match("/(^EL)[^A-Za-z0-9]/", $nom_form) or 
-	preg_match("/(^EL)[^A-Za-z0-9]/", $prenom_form) or preg_match("/[^0-9]/", $am) ){
-		$registration_errors[] = $langInvalidInputInUserReg;
+    if (   preg_match("/[^A-Za-z0-9]/", $uname) or preg_match("/(^EL)[^A-Za-z0-9]/", $nom_form) 
+        or preg_match("/(^EL)[^A-Za-z0-9]/", $prenom_form) or preg_match("/[^0-9]/", $am) ) {
+            $registration_errors[] = $langInvalidInputInUserReg;
 	}
 
-	$email = filter_var($email , FILTER_SANITIZE_EMAIL);
-	$uname = preg_replace("/[^A-Za-z0-9]/", '', $uname);
-	$nom_form = preg_replace("/(^EL)[^A-Za-z0-9]/", '', $nom_form);
+	$email       = filter_var($email , FILTER_SANITIZE_EMAIL);
+	$uname       = preg_replace("/[^A-Za-z0-9]/", '', $uname);
+	$nom_form    = preg_replace("/(^EL)[^A-Za-z0-9]/", '', $nom_form);
 	$prenom_form = preg_replace("/(^EL)[^A-Za-z0-9]/", '', $prenom_form);
-	$am = preg_replace("/[^0-9]/", '', $am);
+	$am          = preg_replace("/[^0-9]/", '', $am);
 
 
 	// echo $uname . " " . $email . " " . $nom_form . " " . $prenom_form . " " . $am ;
@@ -174,91 +175,98 @@ if (!isset($submit)) {
 		// check if the two passwords match
 		if ($password != $_POST['password1']) {
 			$registration_errors[] = $langPassTwice;
-		} elseif (strtoupper($password) == strtoupper($uname)
-			or strtoupper($password) == strtoupper($nom_form)
-			or strtoupper($password) == strtoupper($prenom_form)
-			or strtoupper($password) == strtoupper($email)) {
+		} elseif (   strtoupper($password) == strtoupper($uname)
+			      or strtoupper($password) == strtoupper($nom_form)
+			      or strtoupper($password) == strtoupper($prenom_form)
+			      or strtoupper($password) == strtoupper($email)) {
 				// if the passwd is too easy offer a password sugestion
-				$registration_errors[] = $langPassTooEasy . ': <strong>' .
-					substr(md5(date("Bis").$_SERVER['REMOTE_ADDR']),0,8) . '</strong>';
+				$registration_errors[] = $langPassTooEasy . ': <strong>' . substr(md5(date("Bis").$_SERVER['REMOTE_ADDR']),0,8) . '</strong>';
 			}
 	}
 	if (count($registration_errors) == 0) {
-	$emailsubject = "$langYourReg $siteName";
-			$uname = unescapeSimple($uname); // un-escape the characters: simple and double quote
-			$password = unescapeSimple($password);
-			if((!empty($auth_method_settings)) && ($auth!=1)) {
-				$emailbody = "$langDestination $prenom_form $nom_form\n" .
-					"$langYouAreReg $siteName $langSettings $uname\n" .
-					"$langPassSameAuth\n$langAddress $siteName: " .
-					"$urlServer\n$langProblem\n$langFormula" .
-					"$administratorName $administratorSurname" .
-					"$langManager $siteName \n$langTel $telephone \n" .
-					"$langEmail: $emailhelpdesk";
-		} else {
-			$emailbody = "$langDestination $prenom_form $nom_form\n" .
-				"$langYouAreReg $siteName $langSettings $uname\n" .
-				"$langPass: $password\n$langAddress $siteName: " .
-				"$urlServer\n$langProblem\n$langFormula" .
-				"$administratorName $administratorSurname" .
-				"$langManager $siteName \n$langTel $telephone \n" .
-				"$langEmail: $emailhelpdesk";
-		}
-	
-	send_mail('', '', '', $email, $emailsubject, $emailbody, $charset);
-	$registered_at = time();
-	$expires_at = time() + $durationAccount;  //$expires_at = time() + 31536000;
-	
-	// manage the store/encrypt process of password into database
-	$authmethods = array("2","3","4","5");
-	$uname = escapeSimple($uname);  // escape the characters: simple and double quote
-	$password = escapeSimpleSelect($password);  // escape the characters: simple and double quote
-	if(!in_array($auth,$authmethods)) {
-		$password_encrypted = md5($password);
-	} else {
-		$password_encrypted = $password;
-	}
-	$q1 = "INSERT INTO `$mysqlMainDb`.user
-	(user_id, nom, prenom, username, password, email, statut, department, am, registered_at, expires_at, lang)
-	VALUES ('NULL', '$nom_form', '$prenom_form', '$uname', '$password_encrypted', '$email','5',
-		'$department','$am',".$registered_at.",".$expires_at.",'$lang')";
-	$inscr_user = mysql_query($q1);
-	$last_id = mysql_insert_id();
-	$result=mysql_query("SELECT user_id, nom, prenom FROM `$mysqlMainDb`.user WHERE user_id='$last_id'");
-	// $prenom_form = filter_var ( $prenom_form , FILTER_SANITIZE_STRING ,FILTER_FLAG_STRIP_HIGH | FILTER_FLAG_STRIP_LOW );
-	
-	// die;
-	while ($myrow = mysql_fetch_array($result)) {
-		$uid=$myrow[0];
-		$nom=$myrow[1];
-		$prenom=$myrow[2];
-	}
-	mysql_query("INSERT INTO `$mysqlMainDb`.loginout (loginout.idLog, loginout.id_user, loginout.ip, loginout.when, loginout.action)
-	VALUES ('', '".$uid."', '".$REMOTE_ADDR."', NOW(), 'LOGIN')");
-	$_SESSION['uid'] = $uid;
-	$_SESSION['statut'] = 5;
-	$_SESSION['prenom'] = $prenom;
-	$_SESSION['nom'] = $nom;
-	$_SESSION['uname'] = $uname;
-	
-	// registration form
-	$tool_content .= "<table width='99%'><tbody><tr>" .
-			"<td class='well-done' height='60'>" .
-			"<p>$langDear $prenom $nom,</p>" .
-			"<p>$langPersonalSettings</p></td>" .
-			"</tr></tbody></table><br /><br />" .
-			"<p>$langPersonalSettingsMore</p>";
+        
+        $emailsubject = "$langYourReg $siteName";
+        $uname        = unescapeSimple($uname); // un-escape the characters: simple and double quote
+        $password     = unescapeSimple($password);
+        
+        if((!empty($auth_method_settings)) && ($auth!=1)) {
+                $emailbody = "$langDestination $prenom_form $nom_form\n"       .
+                             "$langYouAreReg $siteName $langSettings $uname\n" .
+                             "$langPassSameAuth\n$langAddress $siteName: "     .
+                             "$urlServer\n$langProblem\n$langFormula"          .
+                             "$administratorName $administratorSurname"        .
+                             "$langManager $siteName \n$langTel $telephone \n" .
+                             "$langEmail: $emailhelpdesk";
+        } else {
+            $emailbody = "$langDestination $prenom_form $nom_form\n"       .
+                         "$langYouAreReg $siteName $langSettings $uname\n" .
+                         "$langPass: $password\n$langAddress $siteName: "  .
+                         "$urlServer\n$langProblem\n$langFormula"          .
+                         "$administratorName $administratorSurname"        .
+                         "$langManager $siteName \n$langTel $telephone \n" .
+                         "$langEmail: $emailhelpdesk";
+        }
+    
+        send_mail('', '', '', $email, $emailsubject, $emailbody, $charset);
+        $registered_at = time();
+        $expires_at    = time() + $durationAccount;  //$expires_at = time() + 31536000;
+        
+        // manage the store/encrypt process of password into database
+        $authmethods = array("2","3","4","5");
+        $uname       = escapeSimple($uname);  // escape the characters: simple and double quote
+        $password    = escapeSimpleSelect($password);  // escape the characters: simple and double quote
+        
+        if(!in_array($auth,$authmethods)) {
+            $password_encrypted = md5($password);
+        } else {
+            $password_encrypted = $password;
+        }
+
+        $q1 = "INSERT INTO `$mysqlMainDb`.user
+        (user_id, nom, prenom, username, password, email, statut, department, am, registered_at, expires_at, lang)
+         VALUES ('NULL', '$nom_form', '$prenom_form', '$uname', '$password_encrypted', '$email','5',
+                 '$department','$am',".$registered_at.",".$expires_at.",'$lang')";
+        
+        $inscr_user = mysql_query($q1);
+        $last_id    = mysql_insert_id();
+        $result     = mysql_query("SELECT user_id, nom, prenom FROM `$mysqlMainDb`.user WHERE user_id='$last_id'");
+        // $prenom_form = filter_var ( $prenom_form , FILTER_SANITIZE_STRING ,FILTER_FLAG_STRIP_HIGH | FILTER_FLAG_STRIP_LOW );
+        
+        // die;
+        while ($myrow = mysql_fetch_array($result)) {
+            $uid    = $myrow[0];
+            $nom    = $myrow[1];
+            $prenom = $myrow[2];
+        }
+        
+        mysql_query("INSERT INTO `$mysqlMainDb`.loginout (loginout.idLog, loginout.id_user, loginout.ip, loginout.when, loginout.action)
+        VALUES ('', '".$uid."', '".$REMOTE_ADDR."', NOW(), 'LOGIN')");
+        
+        $_SESSION['uid']    = $uid;
+        $_SESSION['statut'] = 5;
+        $_SESSION['prenom'] = $prenom;
+        $_SESSION['nom']    = $nom;
+        $_SESSION['uname']  = $uname;
+        
+        // registration form
+        $tool_content .= "<table width='99%'><tbody><tr>"    .
+                        "<td class='well-done' height='60'>" .
+                        "<p>$langDear $prenom $nom,</p>"     .
+                        "<p>$langPersonalSettings</p></td>"  .
+                        "</tr></tbody></table><br /><br />"  .
+                        "<p>$langPersonalSettingsMore</p>";
 	} else {
 		// errors exist - registration failed
 		$tool_content .= "<table width='99%'><tbody><tr>" .
-				"<td class='caution' height='60'>";
+                         "<td class='caution' height='60'>";
+
 		foreach ($registration_errors as $error) {
 			$tool_content .= "<p>$error</p>";
 		}
-		$tool_content .= "<p><a href='$_SERVER[PHP_SELF]?prenom_form=$_POST[prenom_form]&nom_form=$_POST[nom_form]&uname=$_POST[uname]&email=$_POST[email]&am=$_POST[am]'>$langAgain</a></p>" .
-					"</td></tr></tbody></table><br /><br />";
-	}
 
+        $tool_content .= "<p><a href='$_SERVER[PHP_SELF]?prenom_form=$_POST[prenom_form]&nom_form=$_POST[nom_form]&uname=$_POST[uname]&email=$_POST[email]&am=$_POST[am]'>$langAgain</a></p>" .
+		    			 "</td></tr></tbody></table><br /><br />";
+	}
 } // end of registration
 
 draw($tool_content,0);
