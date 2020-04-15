@@ -70,7 +70,8 @@ if (!($uid) or !($_SESSION['uid'])) {
 $head_content = '<script type="text/javascript">
 function prepare_message()
 {
-	document.chatForm.chatLine.value=document.chatForm.msg.value;
+  document.chatForm.chatLine.value=document.chatForm.msg.value;
+  document.chatForm.chatLine.value;
 	document.chatForm.msg.value = "";
 	document.chatForm.msg.focus();
 	return true;

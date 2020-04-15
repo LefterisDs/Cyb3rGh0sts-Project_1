@@ -38,6 +38,12 @@ check_guest();
 $allow_username_change = !get_config('block-username-change');
 
 if (isset($submit) && (!isset($ldap_submit)) && !isset($changePass)) {
+
+		if ($_REQUEST['token'] != $_SESSION['tok']){
+			echo 'Request error!';
+			die;
+		}
+
         if (!$allow_username_change) {
                 $username_form = $uname;
         }
@@ -301,14 +307,15 @@ if ((!isset($changePass)) || isset($_POST['submit'])) {
       </td>
     </tr>
 	<tr>
-      <th>&nbsp;</th>
+	  <th>&nbsp;</th>
       <td><input type=\"Submit\" name=\"submit\" value=\"$langModify\"></td>
     </tr>
     </tbody>
     </table>
-
+	<input type=\"hidden\" name=\"token\" value=".$_SESSION['tok'].">
 </form>
    ";
 }
-
+// echo $_SESSION['tok'];
 draw($tool_content, 1);
+

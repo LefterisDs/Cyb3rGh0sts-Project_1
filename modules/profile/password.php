@@ -47,6 +47,11 @@ $passurl = $urlSecure.'modules/profile/password.php';
 
 if (isset($submit) && isset($changePass) && ($changePass == "do")) {
 
+	if ($_REQUEST['token'] != $_SESSION['tok']){
+		echo 'Request error!';
+		die;
+	}
+
 	if (empty($_REQUEST['password_form']) || empty($_REQUEST['password_form1']) || empty($_REQUEST['old_pass'])) {
 		header("location:". $passurl."?msg=3");
 		exit();
@@ -166,11 +171,13 @@ if (!isset($changePass)) {
      <td><input class='FormData_InputText' type=\"password\" size=\"40\" name=\"password_form1\" value=\"\"></td>
     </tr>
 	<tr>
-      <th>&nbsp;</th>
+	  <th>&nbsp;</th>
       <td><input type=\"Submit\" name=\"submit\" value=\"$langModify\"></td>
     </tr>
 	</tbody>
-    </table>
+	</table>
+	
+	<td><input type=\"hidden\" name=\"token\" value=".$_SESSION['tok']."></td>
 
 </form>
    ";

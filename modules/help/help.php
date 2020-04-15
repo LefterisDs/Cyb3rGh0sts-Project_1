@@ -31,6 +31,8 @@ if (!isset($language)) {
 	$language = preg_replace('/[^a-z-]/', '', $language);
 }
 
+echo $language;
+
 if (file_exists("../lang/$language/help.inc.php")) {
 	include("../lang/$language/help.inc.php");
 } else {

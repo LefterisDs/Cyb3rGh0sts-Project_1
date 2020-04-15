@@ -334,6 +334,11 @@ if (isset($_POST['back1']) or !isset($_POST['visit'])) {
 // create the course and the course database
 if (isset($_POST['create_course'])) {
 
+		if ($_REQUEST['token'] != $_SESSION['tok']){
+			echo 'Request error!';
+			die;
+		}
+
         $nameTools = $langCourseCreate;
         $facid = intval($faculte);
         $facname = find_faculty_by_id($facid);
@@ -432,7 +437,7 @@ if (isset($_POST['create_course'])) {
                 <p align='center'>&nbsp;<a href='../../courses/$repertoire/index.php' class=mainpage>$langEnter</a>&nbsp;</p>";
 } // end of submit
 
-$tool_content .= "</form>";
+$tool_content .= "<input type=\"hidden\" name=\"token\" value=".$_SESSION['tok']."></form>";
 
 draw($tool_content, '1', 'create_course', $head_content);
 ?>

@@ -297,6 +297,8 @@ function submit_work($id) {
 
 	$msg1 = delete_submissions_by_uid($uid, -1, $id);
 
+	$stud_comments = filter_var($stud_comments , FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
 	$local_name = greek_to_latin(uid_to_name($uid));
 	$am = mysql_fetch_array(db_query("SELECT am FROM user WHERE user_id = '$uid'"));
 	if (!empty($am[0])) {

@@ -3,6 +3,8 @@
 // Message file for language en
 // Generated 2010-04-13 14:03:10
 
+$langInvalidInputInUserReg = "You used invalid characters!";
+
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName version";
 $langAboutText = "The platform version is";

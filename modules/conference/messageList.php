@@ -97,6 +97,9 @@ if (isset($_GET['store']) && $is_adminOfCourse) {
 
 // add new line
 if (isset($chatLine) and trim($chatLine) != '') {
+	
+	$chatLine = filter_var($chatLine , FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
 	$fchat = fopen($fileChatName,'a');
 	$chatLine = mathfilter($chatLine, 12, '../../courses/mathimg/');
 	fwrite($fchat,$timeNow.' - '.$nick.' : '.stripslashes($chatLine)."\n");

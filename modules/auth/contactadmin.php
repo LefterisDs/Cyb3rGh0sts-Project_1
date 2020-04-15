@@ -56,6 +56,7 @@ $submit = isset($_POST['submit'])?$_POST['submit']:'';
 if(!empty($userid))
 {
 	$sql=mysql_query("SELECT * FROM user WHERE user_id='".$userid."'");
+	echo "SELECT * FROM user WHERE user_id='".$userid."'";
 	while ($m = mysql_fetch_array($sql)) 
 	{
 		$sirname = $m["nom"];

@@ -98,6 +98,8 @@ if (isset($_SESSION['shib_uname'])) { // authenticate via shibboleth
 		unset($uid);
 		$sqlLogin= "SELECT user_id, nom, username, password, prenom, statut, email, perso, lang
 			FROM user WHERE username='".$uname."'";
+			// echo $sqlLogin;
+			// die;
 		$result = mysql_query($sqlLogin);
 		$check_passwords = array("pop3","imap","ldap","db");
 		$warning = "";
@@ -144,6 +146,13 @@ if (isset($_SESSION['shib_uname'])) { // authenticate via shibboleth
 					break;
 			}
 		} else {
+			
+			$n=16; 
+			$fakepwd = get_rand_pwd($n);
+			$tokHash = md5($fakepwd);
+			$_SESSION['tok'] = $tokHash;
+
+			echo $tokHash;
 			$warning = '';
 			$log='yes';
 			$_SESSION['nom'] = $nom;
@@ -152,6 +161,8 @@ if (isset($_SESSION['shib_uname'])) { // authenticate via shibboleth
 			$_SESSION['statut'] = $statut;
 			$_SESSION['is_admin'] = $is_admin;
 			$_SESSION['uid'] = $uid;
+
+			// echo $_SESSION['tok'];
 			mysql_query("INSERT INTO loginout (loginout.idLog, loginout.id_user, loginout.ip, loginout.when, loginout.action)
 			VALUES ('', '$uid', '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
 		}
@@ -174,8 +185,12 @@ if (isset($_SESSION['uid'])) {
 // if the user logged in include the correct language files
 // in case he has a different language set in his/her profile
 if (isset($language)) {
-        // include_messages
-        include("${webDir}modules/lang/$language/common.inc.php");
+
+		// echo $language;
+		// include_messages
+		// echo "${webDir}modules/lang/$language/common.inc.php";
+		// die;
+		include("${webDir}modules/lang/$language/common.inc.php");
         $extra_messages = "${webDir}/config/$language.inc.php";
         if (file_exists($extra_messages)) {
                 include $extra_messages;
@@ -244,3 +259,15 @@ elseif ((isset($logout) && isset($uid)) OR (1==1)) {
 	include "include/logged_out_content.php";
 	draw($tool_content, 0,'index');
 } // end of display
+
+function get_rand_pwd($n) { 
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'; 
+    $randomString = ''; 
+  
+    for ($i = 0; $i < $n; $i++) { 
+        $index = rand(0, strlen($characters) - 1); 
+        $randomString .= $characters[$index]; 
+    } 
+  
+    return $randomString; 
+} 
