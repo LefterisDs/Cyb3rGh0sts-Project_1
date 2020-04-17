@@ -114,7 +114,20 @@ if (!isset($submit)) {
 } else {
 
 // registration
-$registration_errors = array();
+  $registration_errors = array();
+
+  if (   preg_match("/[^A-Za-z0-9]/", $uname) or preg_match("/(^EL)[^A-Za-z0-9]/", $nom_form) 
+          or preg_match("/(^EL)[^A-Za-z0-9]/", $prenom_form) or preg_match("/[^0-9]/", $userphone) ) {
+              $registration_errors[] = $langInvalidInputInUserReg;
+    }
+
+    $email_form  = filter_var($email_form , FILTER_SANITIZE_EMAIL);
+    $uname       = preg_replace("/[^A-Za-z0-9]/", '', $uname);
+    $nom_form    = preg_replace("/(^EL)[^A-Za-z0-9]/", '', $nom_form);
+    $prenom_form = preg_replace("/(^EL)[^A-Za-z0-9]/", '', $prenom_form);
+    $userphone   = preg_replace("/[^0-9]/", '', $userphone);
+    $usercomment = filter_var($usercomment , FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
 
     // check if there are empty fields
     if (empty($nom_form) or empty($prenom_form) or empty($userphone)
