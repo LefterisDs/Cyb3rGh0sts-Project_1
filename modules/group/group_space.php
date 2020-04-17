@@ -51,6 +51,13 @@ $nameTools = $langGroupSpace;
 $navigation[] = array ("url"=>"group.php", "name"=> $langGroups);
 $tool_content = "";
 
+if (preg_match("/[^0-9]/", $userGroupId)){
+	header("Location: ../../courses/TMA100/index.php");
+	exit();
+}
+
+$userGroupId = preg_replace("/[^0-9]/", '', $userGroupId);
+
 $countRegistered = mysql_num_rows(db_query("SELECT id FROM user_group 
 	WHERE team='$userGroupId'", $currentCourse));
 $total = mysql_fetch_array(db_query("SELECT maxStudent FROM student_group 
@@ -130,6 +137,8 @@ while ($myGroup = mysql_fetch_array($resultGroup))
 	<td>$myGroup[name]</td>
 	</tr>";
 
+
+	$userGroupId = preg_replace("/[^0-9]/", '', $userGroupId);
 	$sqlTutor=mysql_query("SELECT tutor, user_id, nom, prenom, email, forumId
 		FROM `$mysqlMainDb`.user, student_group
 		WHERE user.user_id=student_group.tutor
@@ -172,6 +181,8 @@ $tool_content .= "<tr><th class=\"left\" valign=\"top\">$langGroupMembers :</th>
 </tr>
 </thead>
 <tbody>";
+
+$userGroupId = preg_replace("/[^0-9]/", '', $userGroupId);
 
 $resultMember=mysql_query("SELECT nom, prenom, email, am
 		FROM `$mysqlMainDb`.user, user_group
