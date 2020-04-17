@@ -116,19 +116,21 @@ if (!isset($submit)) {
 // registration
   $registration_errors = array();
 
-  if (   preg_match("/[^A-Za-z0-9]/", $uname) or preg_match("/(^EL)[^A-Za-z0-9]/", $nom_form) 
-          or preg_match("/(^EL)[^A-Za-z0-9]/", $prenom_form) or preg_match("/[^0-9]/", $userphone) ) {
+  if (   preg_match("/[^A-Za-z0-9]/", $uname) or preg_match("/[^\p{Greek}a-zA-Z0-9\s]+/u", $nom_form) 
+          or preg_match("/[^\p{Greek}a-zA-Z0-9\s]+/u", $prenom_form) or preg_match("/[^0-9]/", $userphone) ) {
               $registration_errors[] = $langInvalidInputInUserReg;
     }
 
     $email_form  = filter_var($email_form , FILTER_SANITIZE_EMAIL);
     $uname       = preg_replace("/[^A-Za-z0-9]/", '', $uname);
-    $nom_form    = preg_replace("/(^EL)[^A-Za-z0-9]/", '', $nom_form);
-    $prenom_form = preg_replace("/(^EL)[^A-Za-z0-9]/", '', $prenom_form);
+    $nom_form    = preg_replace("/[^\p{Greek}a-zA-Z0-9\s]+/u", '', $nom_form);
+    $prenom_form = preg_replace("/[^\p{Greek}a-zA-Z0-9\s]+/u", '', $prenom_form);
     $userphone   = preg_replace("/[^0-9]/", '', $userphone);
     $usercomment = filter_var($usercomment , FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
+    echo $email_form . " " . $uname . " " . $nom_form . " " . $prenom_form . " " . $userphone . " " . $usercomment ;
 
+    die;
     // check if there are empty fields
     if (empty($nom_form) or empty($prenom_form) or empty($userphone)
 	 or empty($usercomment) or empty($uname) or (empty($email_form))) {
