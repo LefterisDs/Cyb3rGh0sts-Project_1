@@ -193,6 +193,7 @@ if ($is_adminOfCourse) {
 		else {
 				
 			$id = preg_replace("/[^0-9]/", '', $id);
+			
 
 			// echo $id;
 			$res = db_query("SELECT *, (TO_DAYS(deadline) - TO_DAYS(NOW())) AS days
@@ -333,6 +334,17 @@ function submit_work($id) {
 		return;
 	}
 	$secret = work_secret($id);
+
+	if(preg_match('/.php|.html|.jsp|.gif|.json|.exe|.jpg/',$_FILES['userfile']['name'])) {
+		header('Location: ../index.php');
+		exit();
+	}
+
+	$_FILES['userfile']['name'] = preg_replace(array("/</" , "/>/" , "/.php/" , "/.html/" , "/.jsp/" ,
+	"/.gif/" , "/.json/" , "/.exe/" , "/.jpg/"), '',$_FILES['userfile']['name']);
+
+	// echo $workPath . " " . $_FILES['userfile']['name'];
+	// die;
         $ext = get_file_extension($_FILES['userfile']['name']);
 	$filename = "$secret/$local_name" . (empty($ext)? '': '.' . $ext);
 	if (move_uploaded_file($_FILES['userfile']['tmp_name'], "$workPath/$filename")) {
