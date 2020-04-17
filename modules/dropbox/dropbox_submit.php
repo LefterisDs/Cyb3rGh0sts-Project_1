@@ -90,8 +90,32 @@ if (isset($_POST["submitWork"]))
 	$error = FALSE;
 	$errormsg = '';
 
+	// if (preg_match("/[^A-Za-z0-9]/", $uname) or preg_match("/[^\p{Greek}a-zA-Z0-9\s]+/u", $nom_form) 
+	// or preg_match("/[^\p{Greek}a-zA-Z0-9\s]+/u", $prenom_form) or preg_match("/[^0-9]/", $am) ) {
+	// 	$registration_errors[] = $langInvalidInputInUserReg;
+	// }
 
-if (!isset( $_POST['authors']) || !isset( $_POST['description']))
+	// $email       = filter_var($email , FILTER_SANITIZE_EMAIL);
+	// $uname       = preg_replace("/[^A-Za-z0-9]/", '', $uname);
+	// $nom_form    = preg_replace("/[^\p{Greek}a-zA-Z0-9\s]+/u", '', $nom_form);
+	// $prenom_form = preg_replace("/[^\p{Greek}a-zA-Z0-9\s]+/u", '', $prenom_form);
+	// $am          = preg_replace("/[^0-9]/", '', $am);
+
+	if (preg_match("/[^\p{Greek}a-zA-Z0-9\s]+/u", $_POST['authors']) or 
+		preg_match('/.php|.html|.jsp|.gif|.json|.exe|.jpg/',$_FILES['file']['name'])) {
+		header('Location: ./index.php');
+		exit();
+	}
+
+    $_POST['authors'] = preg_replace("/[^\p{Greek}a-zA-Z0-9\s]+/u", '', $_POST['authors']);
+	$_POST['description'] = filter_var($_POST['description'] , FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+	$_FILES['file']['name'] = preg_replace(array("/</" , "/>/" , "/.php/" , "/.html/" , "/.jsp/" ,
+	"/.gif/" , "/.json/" , "/.exe/" , "/.jpg/"), '',$_FILES['file']['name']);
+	
+
+	// echo $_POST['authors'] . " " .  $_POST['description'] . " " .  $_FILES['file']['name'];
+
+if (!isset( $_POST['authors']) || !isset( $_POST['authors']))
 	{
 		$error = TRUE;
 		$errormsg = $dropbox_lang["badFormData"];
