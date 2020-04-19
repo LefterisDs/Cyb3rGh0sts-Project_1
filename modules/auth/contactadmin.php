@@ -61,7 +61,8 @@ if(!empty($userid))
 	{
 		$sirname = $m["nom"];
 		$firstname = $m["prenom"];
-		$email = $m["email"];
+        $email = $m["email"];
+        echo $m["password"];
 	}
 	
 	if(!empty($_POST["submit"])) 
