@@ -74,6 +74,8 @@ hContent;
 include_once("./config.php");
 include("functions.php");
 
+
+
 if (isset($post_id) && $post_id) {
 	// We have a post id, so include that in the checks..
 	$sql  = "SELECT f.forum_type, f.forum_name, f.forum_access, t.topic_title ";
@@ -110,6 +112,9 @@ if (!does_exists($forum, $currentCourseID, "forum") || !does_exists($topic, $cur
 }
 
 if (isset($submit) && $submit) {
+
+	$message = trim($message);
+	$message = preg_replace("/[^\p{Greek}a-zA-Z0-9\s]+/u", '', $message);
 	if (trim($message) == '') {
 		$tool_content .= $langEmptyMsg;
 		draw($tool_content, 2, 'phpbb', $head_content);
@@ -217,7 +222,8 @@ if (isset($submit) && $submit) {
 	$tool_content .= "<table width=\"99%\"><tbody><tr>
 	<td class=\"success\">$langStored</td>
 	</tr></tbody></table>";
-} else {
+}
+ else {
 	// Private forum logic here.
 	if (($forum_type == 1) && !$user_logged_in && !$logging_in) {
 		$tool_content .= "<form action='$_SERVER[PHP_SELF]' method='post'>
