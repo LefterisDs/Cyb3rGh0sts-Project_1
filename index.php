@@ -100,6 +100,14 @@ if (isset($_SESSION['shib_uname'])) { // authenticate via shibboleth
 	$auth = get_auth_active_methods();
 	$is_eclass_unique = is_eclass_unique();
 
+
+	if (preg_match("/[^A-Za-z0-9]/", $uname) ) {
+		header("Location: ./index.php");
+		exit();
+	}
+	
+	$uname = preg_replace("/[^A-Za-z0-9]/", '', $uname);
+
 	if(!empty($submit)) {
 		unset($uid);
 		$sqlLogin= "SELECT user_id, nom, username, password, prenom, statut, email, perso, lang
