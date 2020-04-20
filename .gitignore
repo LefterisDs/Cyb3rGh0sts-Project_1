@@ -1,2 +1,6 @@
-config/config.php
-
+config/
+courses/
+video/
+run_urls.py
+hacks.txt
+.gitignore
