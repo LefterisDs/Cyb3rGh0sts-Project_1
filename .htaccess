@@ -1,5 +1,5 @@
-AuthName "This site is protected with a password"
+AuthName "Password protected"
 AuthType Basic
-AuthUserFile /customers/c/8/e/one-example.com/httpd.www/.htpasswd
+AuthUserFile /customers/c/c/4/chatzi.org/httpd.www/.htpasswd
 AuthGroupFile /dev/null 
 require valid-user
