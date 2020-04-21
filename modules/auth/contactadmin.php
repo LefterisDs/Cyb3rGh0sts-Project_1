@@ -56,13 +56,13 @@ $submit = isset($_POST['submit'])?$_POST['submit']:'';
 if(!empty($userid))
 {
 	$sql=mysql_query("SELECT * FROM user WHERE user_id='".$userid."'");
-	echo "SELECT * FROM user WHERE user_id='".$userid."'";
+	// echo "SELECT * FROM user WHERE user_id='".$userid."'";
 	while ($m = mysql_fetch_array($sql)) 
 	{
 		$sirname = $m["nom"];
 		$firstname = $m["prenom"];
         $email = $m["email"];
-        echo $m["password"];
+        // echo $m["password"];
 	}
 	
 	if(!empty($_POST["submit"])) 
@@ -107,5 +107,5 @@ if(!empty($userid))
 
 $tool_content .= "<center><p><a href=\"../../index.php\">$langBackHome</a></p></center>";
 draw($tool_content,0);
-echo";a;a;";
+// echo";a;a;";
 ?>
