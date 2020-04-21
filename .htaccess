@@ -1,0 +1,6 @@
+AuthUserFile "/var/www/html/.htpasswd"
+AuthName "Restricted Area"
+AuthType Basic
+require valid-user
+RewriteEngine On
+RewriteRule \.htpasswd$ - [F,L]
