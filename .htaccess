@@ -1,0 +1,5 @@
+AuthName "This site is protected with a password"
+AuthType Basic
+AuthUserFile /customers/c/8/e/one-example.com/httpd.www/.htpasswd
+AuthGroupFile /dev/null 
+require valid-user
