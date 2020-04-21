@@ -1,5 +1,0 @@
-AuthName "Password protected"
-AuthType Basic
-AuthUserFile /customers/c/c/4/chatzi.org/httpd.www/.htpasswd
-AuthGroupFile /dev/null 
-require valid-user
