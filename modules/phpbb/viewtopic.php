@@ -84,6 +84,9 @@ if (isset($_GET['all'])) {
         $paging = true;
 }
 
+$forum = preg_replace("/[^0-9]/" , '' , $forum);
+$topic = preg_replace("/[^0-9]/" , '' , $topic);
+
 $sql = "SELECT f.forum_type, f.forum_name
         FROM forums f, topics t 
         WHERE    (f.forum_id = '$forum')
@@ -153,6 +156,7 @@ if ($paging and $total > $posts_per_page ) {
 
 	if (isset($_GET['start'])) {
 		$start = intval($_GET['start']);
+		$start = preg_replace("/[^0-9]/" , '' , $start);
 	} else {
 		$start = 0;
 	}
@@ -218,6 +222,9 @@ $tool_content .= <<<cData
 cData;
 
 $topic = intval($_GET['topic']);
+$forum = preg_replace("/[^0-9]/" , '' , $forum);
+$topic = preg_replace("/[^0-9]/" , '' , $topic);
+
 if (isset($_GET['all'])) {
     $sql = "SELECT p.*, pt.post_text FROM posts p, posts_text pt 
 		WHERE topic_id = '$topic' 
@@ -225,6 +232,8 @@ if (isset($_GET['all'])) {
 		ORDER BY post_id";
 } elseif (isset($_GET['start'])) {
 	$start = intval($_GET['start']);
+	$start = preg_replace("/[^0-9]/" , '' , $start);
+	
 	$sql = "SELECT p.*, pt.post_text FROM posts p, posts_text pt 
 		WHERE topic_id = '$topic' 
 		AND p.post_id = pt.post_id

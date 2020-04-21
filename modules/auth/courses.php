@@ -38,6 +38,7 @@ $icons = array(
 
 if (isset($_REQUEST['fc'])) {
         $fc = intval($_REQUEST['fc']);
+	$fc = preg_replace("/[^0-9]/" , '' , $fc);
 } elseif (isset($_SESSION['fc_memo'])) {
         $fc = $_SESSION['fc_memo'];
 } else {
@@ -127,8 +128,8 @@ if (isset($_POST["submit"])) {
 					$tool_content .= "\n        <tr class='odd'>";
 				}
 				$tool_content .= "\n<td>&nbsp;<img src='../../images/arrow_blue.gif' />&nbsp;
-					<a href='$_SERVER[PHP_SELF]?fc=$fac[id]'>" . htmlspecialchars($fac['name']) . "</a> <small><font color='#a33033'>($fac[code])</font></small>";
-				$n=db_query("SELECT COUNT(*) FROM cours_faculte WHERE facid='$fac[id]'");
+				<a href='$_SERVER[PHP_SELF]?fc=$fac[id]'>" . htmlspecialchars($fac['name']) . "</a> <small><font color='#a33033'>($fac[code])</font></small>";
+                                $n=db_query("SELECT COUNT(*) FROM cours_faculte WHERE facid='$fac[id]'");
 				$r=mysql_fetch_array($n);
 				$tool_content .= "&nbsp;<small><font color=#a5a5a5>($r[0]  ". ($r[0] == 1? $langAvCours: $langAvCourses) . ")</font><small></td></tr>";
 				$k++;
@@ -388,7 +389,6 @@ function collapsed_facultes_vert($fc) {
 
 	while ($fac = mysql_fetch_array($result)) {
 		$retString .= "<a href='?fc=$fac[id]' class='normal'>$fac[f]</a>";
-
 		$n = db_query("SELECT COUNT(*) FROM cours
 			WHERE cours.faculte='$fac[f]' AND cours.visible <> '0'");
                 $r = mysql_fetch_array($n);

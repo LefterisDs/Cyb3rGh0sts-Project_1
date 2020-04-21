@@ -62,6 +62,16 @@ if (isset($uid))
 		$year = $today['year'];
 		$month = $today['mon'];
 	}
+	else {
+		if (preg_match("/[^0-9]/", $year) or preg_match("/[^0-9]/" , $month) ) {
+			header('Location: ./myagenda.php');
+			exit();
+		}
+		else {
+			$year = preg_replace("/[^0-9]/" , '' , $year);
+			$month = preg_replace("/[^0-9]/", '' , $month);
+		}
+	}
 
 	@$agendaitems = get_agendaitems($query, $month, $year);
 	$monthName = $langMonthNames['long'][$month-1];
