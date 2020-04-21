@@ -72,6 +72,8 @@ include_once("./config.php");
 include("functions.php"); 
 
 $forum = intval($_GET['forum']);
+$forum = preg_replace("/[^0-9]/" , '' , $forum);
+
 
 $tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\">";
 
@@ -91,7 +93,11 @@ $sql = "SELECT f.forum_type, f.forum_name
 
 $result = db_query($sql, $currentCourseID);
 $myrow = mysql_fetch_array($result);
- 
+
+if (count($myrow) <= 1){
+	header("Location: ./index.php");
+	exit();
+}
 $forum_name = own_stripslashes($myrow["forum_name"]);
 $nameTools = $forum_name;
 
