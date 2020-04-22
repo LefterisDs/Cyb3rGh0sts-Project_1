@@ -61,6 +61,8 @@ if (isset($_GET['mailing']))
  */
 if (!isset( $_GET['id']) || ! is_numeric( $_GET['id'])) die($dropbox_lang["generalError"]);
 
+$_GET['id'] = preg_replace("/[^0-9]/" , '' , $_GET['id']);
+
 $work = new Dropbox_work($_GET['id']);
 
 $path = $dropbox_cnf["sysPath"] . "/" . $work -> filename; //path to file as stored on server

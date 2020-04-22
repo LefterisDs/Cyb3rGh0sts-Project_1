@@ -39,14 +39,27 @@ $allow_username_change = !get_config('block-username-change');
 
 if (isset($submit) && (!isset($ldap_submit)) && !isset($changePass)) {
 
-		if ($_REQUEST['token'] != $_SESSION['tok']){
-			echo 'Request error!';
-			die;
-		}
+	if ($_REQUEST['token'] != $_SESSION['tok']){
+		echo 'Request error!';
+		die;
+	}
 
-        if (!$allow_username_change) {
-                $username_form = $uname;
-        }
+	if (preg_match("/[^\p{Greek}a-zA-Z0-9\s]+/u", $nom_form) or preg_match("/[^\p{Greek}a-zA-Z0-9\s]+/u", $prenom_form)
+	or preg_match("/[^a-zA-Z0-9]/", $username_form) or preg_match("/[^0-9]/", $am_form)){
+		header("Location: ./profile.php");
+		exit();
+	}
+
+	
+	$username_form = preg_replace("/[^A-Za-z0-9]/", '',  $username_form);
+	$prenom_form   = preg_replace("/[^\p{Greek}a-zA-Z0-9\s]+/u", '', $prenom_form);
+	$nom_form      = preg_replace("/[^\p{Greek}a-zA-Z0-9\s]+/u", '', $nom_form);
+	$am_form       = preg_replace("/[^0-9]/", '', $am_form);
+	$email_form    = filter_var($email_form , FILTER_SANITIZE_EMAIL);
+
+	if (!$allow_username_change) {
+			$username_form = $uname;
+	}
 	// check if username exists
 	$username_check=mysql_query("SELECT username FROM user WHERE username='".escapeSimple($username_form)."'");
 	while ($myusername = mysql_fetch_array($username_check))
@@ -316,6 +329,5 @@ if ((!isset($changePass)) || isset($_POST['submit'])) {
 </form>
    ";
 }
-// echo $_SESSION['tok'];
 draw($tool_content, 1);
 
