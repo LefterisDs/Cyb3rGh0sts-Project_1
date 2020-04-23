@@ -35,6 +35,11 @@
  *
  */
 
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . substr($_SERVER['PHP_SELF'], 0, -1));
+	exit();
+}
+
 $require_login = TRUE;
 $ignore_module_ini = true;
 

@@ -25,6 +25,11 @@
 * =========================================================================*/
 
 
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . substr($_SERVER['PHP_SELF'], 0, -1));
+	exit();
+}
+
 header('Content-Type: text/html; charset=UTF-8');
 
 $path2add=2;

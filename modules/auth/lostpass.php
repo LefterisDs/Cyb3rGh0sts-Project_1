@@ -34,6 +34,11 @@
  *
  */
 
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . substr($_SERVER['PHP_SELF'], 0, -1));
+	exit();
+}
+
 // Initialise $tool_content
 $tool_content = "";
 include '../../include/baseTheme.php';

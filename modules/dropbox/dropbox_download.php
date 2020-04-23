@@ -35,6 +35,11 @@
  * 
  */
  
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . substr($_SERVER['PHP_SELF'], 0, -1));
+	exit();
+}
+
 require_once("dropbox_init1.inc.php");
 require_once("dropbox_class.inc.php");
 
@@ -60,6 +65,8 @@ if (isset($_GET['mailing']))
  * ========================================
  */
 if (!isset( $_GET['id']) || ! is_numeric( $_GET['id'])) die($dropbox_lang["generalError"]);
+
+$_GET['id'] = preg_replace("/[^0-9]/" , '' , $_GET['id']);
 
 $work = new Dropbox_work($_GET['id']);
 

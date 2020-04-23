@@ -34,6 +34,11 @@ header('Content-Type: text/html; charset=UTF-8');
  *
  */
 
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . substr($_SERVER['PHP_SELF'], 0, -1));
+	exit();
+}
+
 if(function_exists("date_default_timezone_set")) { // only valid if PHP > 5.1
 	date_default_timezone_set("Europe/Athens");
 }

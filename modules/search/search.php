@@ -40,9 +40,15 @@ search.php
 //  x. sthn kentrikh selida mathimatos (exei ginei log-in kai o xrhsths eigaxthhke se mathima)
 //*/
 
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . substr($_SERVER['PHP_SELF'], 0, -1));
+	exit();
+}
+
 include '../../include/baseTheme.php';
 if(isset($_POST['search_terms'])) {
 	$search_terms_title = $search_terms_keywords = $search_terms_instructor = $search_terms_coursecode = $_POST['search_terms'];
+	$search_terms_title = filter_var($search_terms_title , FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 }
 //elegxos ean o xrhsths vrisketai sthn kentrikh selida tou systhmatos xwris na exei kanei login
 if (@empty($uid))
