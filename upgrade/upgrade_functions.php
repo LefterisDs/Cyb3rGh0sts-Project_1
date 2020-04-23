@@ -215,7 +215,16 @@ function update_assignment_submit()
 // checks if admin user
 function is_admin($username, $password, $mysqlMainDb) {
 
-	mysql_select_db($mysqlMainDb);
+        mysql_select_db($mysqlMainDb);
+        
+        
+	if (preg_match("/[^a-zA-Z]/", $username) ){
+		header("Location: " . $_SERVER['PHP_SELF']);
+		exit();
+        }
+        
+        $username = preg_replace("/[^a-zA-Z]/", '',  $username);
+
 	$r = mysql_query("SELECT * FROM user, admin WHERE admin.idUser = user.user_id
             AND user.username = '$username' AND user.password = '$password'");
 	if (!$r or mysql_num_rows($r) == 0) {
