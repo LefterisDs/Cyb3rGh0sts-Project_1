@@ -60,6 +60,17 @@ function check_password_editable($password)
 }
 
 if (isset($_REQUEST['do']) && $_REQUEST['do'] == "go") {
+	
+
+	if (preg_match("/[^a-zA-Z0-9]/", $userName) ){
+		header("Location: " . $_SERVER['PHP_SELF']);
+		exit();
+	}
+
+	$email    = filter_var($email , FILTER_SANITIZE_EMAIL);
+	$userName = preg_replace("/[^A-Za-z0-9]/", '',  $userName);
+
+
 	$userUID = (int)$_REQUEST['u'];
 	$hash = $_REQUEST['h'];
 	$res = db_query("SELECT `user_id`, `hash`, `password`, `datetime` FROM passwd_reset
@@ -103,6 +114,15 @@ if (isset($_REQUEST['do']) && $_REQUEST['do'] == "go") {
 } elseif ((!isset($email) || !email_seems_valid($email)
      || !isset($userName) || empty($userName)) && !isset($_REQUEST['do'])) {
 
+		if (preg_match("/[^a-zA-Z0-9]/", $userName) ){
+			header("Location: " . $_SERVER['PHP_SELF']);
+			exit();
+		}
+	
+		$email    = filter_var($email , FILTER_SANITIZE_EMAIL);
+		$userName = preg_replace("/[^A-Za-z0-9]/", '',  $userName);
+	
+
 		$lang_pass_invalid_mail= "$lang_pass_invalid_mail1 $lang_pass_invalid_mail2 $lang_pass_invalid_mail3";
 
 	/***** Email address entry form *****/
@@ -135,6 +155,16 @@ if (isset($_REQUEST['do']) && $_REQUEST['do'] == "go") {
 
 } elseif (!isset($_REQUEST['do'])) {
 	/***** If valid e-mail address was entered, find user and send email *****/
+
+
+	if (preg_match("/[^a-zA-Z0-9]/", $userName) ){
+		header("Location: " . $_SERVER['PHP_SELF']);
+		exit();
+	}
+
+	$email    = filter_var($email , FILTER_SANITIZE_EMAIL);
+	$userName = preg_replace("/[^A-Za-z0-9]/", '',  $userName);
+
 	$res = db_query("SELECT user_id, nom, prenom, username, password, statut FROM user
 			WHERE email = '" . mysql_escape_string($email) . "'
 			AND BINARY username = '" . mysql_escape_string($userName) . "'", $mysqlMainDb);
