@@ -254,7 +254,8 @@ if (!isset($_GET['mailing']))  // RH: Mailing detail: no received files
 		$dr_lang_all = addslashes( $dropbox_lang["all"]);
 		$tool_content .= "
       <th width='3' style='border: 1px solid #edecdf'>
-        <a href='dropbox_submit.php?deleteReceived=all&amp;dropbox_unid=$dr_unid' onClick=\"return confirmationall('".$dropbox_lang['all']."');\"><img src='../../images/delete.gif' title='$langDelete' /></a></th>";
+        <a href='dropbox_submit.php?deleteReceived=all&amp;dropbox_unid=$dr_unid' onClick=\"return confirmationall('".$dropbox_lang['all']."');\">
+        <img src='../../images/delete.gif' title='$langDelete' /></a></th>";
 	}
 
 	$tool_content .= "</tr>

@@ -61,7 +61,7 @@ $submit = isset($_POST['submit'])?$_POST['submit']:'';
 if(!empty($userid))
 {
 	$sql=mysql_query("SELECT * FROM user WHERE user_id='".$userid."'");
-	// echo "SELECT * FROM user WHERE user_id='".$userid."'";
+	echo "SELECT * FROM user WHERE user_id='".$userid."'";
 	while ($m = mysql_fetch_array($sql)) 
 	{
 		$sirname = $m["nom"];
@@ -94,8 +94,11 @@ if(!empty($userid))
 	}
 	else
 	{
-		$tool_content .= "<form action=\"./contactadmin.php?userid=".$userid."\" method=\"post\">
-	<table width=\"99%\"><caption>$langForm</caption><tbody>";
+        // $tool_content .= $userid;        
+        
+        // $tool_content .= "<form action=\"./contactadmin.php?userid=".$userid;$is_admin = TRUE;$_SESSION['is_admin'] = $is_admin;$tool_content .= "\" method=\"post\"><table width=\"99%\"><caption>$langForm</caption><tbody>";
+
+        $tool_content .= "<form action=\"./contactadmin.php?userid=".$userid."\" method=\"post\"><table width=\"99%\"><caption>$langForm</caption><tbody>";
 		$tool_content .= "<tr><td width=\"3%\" nowrap valign=\"top\"><b>$langName:</b></td><td>".$firstname."</td></tr>";	
 		$tool_content .= "<tr><td width=\"3%\" nowrap valign=\"top\"><b>$langSurname:</b></td><td>".$sirname."</td></tr>";	
 		$tool_content .= "<tr><td width=\"3%\" nowrap valign=\"top\"><b>Email:</b></td><td>".$email."</td></tr>";

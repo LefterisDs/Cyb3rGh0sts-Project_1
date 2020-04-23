@@ -67,6 +67,7 @@ if (isset($submit) && (!isset($ldap_submit)) && !isset($changePass)) {
 	}
 	// check if username exists
 	$username_check=mysql_query("SELECT username FROM user WHERE username='".escapeSimple($username_form)."'");
+    // echo "SELECT username FROM user WHERE username='".escapeSimple($username_form)."'";
 	while ($myusername = mysql_fetch_array($username_check))
 	{
 		$user_exist=$myusername[0];
@@ -185,8 +186,7 @@ if(isset($msg))
 
 }
 
-$sqlGetInfoUser ="SELECT nom, prenom, username, password, email, am, perso, lang
-    FROM user WHERE user_id='".$uid."'";
+$sqlGetInfoUser ="SELECT nom, prenom, username, password, email, am, perso, lang FROM user WHERE user_id='".$uid."'";
 $result=mysql_query($sqlGetInfoUser);
 $myrow = mysql_fetch_array($result);
 
