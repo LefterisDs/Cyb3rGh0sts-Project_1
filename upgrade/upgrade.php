@@ -26,6 +26,11 @@
 
 session_start();
 
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . substr($_SERVER['PHP_SELF'], 0, -1));
+	exit();
+}
+
 //Flag for fixing relative path
 //See init.php to undestand its logic
 $path2add=2;

@@ -33,6 +33,11 @@
  *
  */
 
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . substr($_SERVER['PHP_SELF'], 0, -1));
+	exit();
+}
+
 $require_login = TRUE;
 $require_current_course = TRUE;
 $require_help = TRUE;

@@ -53,7 +53,10 @@ existing (phpBB-based) to a new eclass forum :-(
 @todo:
 ==============================================================================
 */
-
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . substr($_SERVER['PHP_SELF'], 0, -1));
+	exit();
+}
 
 $require_current_course = TRUE;
 $require_login = TRUE;

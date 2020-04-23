@@ -35,6 +35,11 @@
     This script is intened to be used by logged-in users (students/adminsitrators)
 ==============================================================================*/
 
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . substr($_SERVER['PHP_SELF'], 0, -1));
+	exit();
+}
+
 $require_current_course = FALSE;
 
 $nameTools = $langSearch;
