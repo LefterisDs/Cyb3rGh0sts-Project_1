@@ -30,8 +30,8 @@ file.php
  * @version $Id: file.php,v 1.6 2009-09-22 09:10:16 adia Exp $
 */
 
-if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
-	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
 	exit();
 }
 

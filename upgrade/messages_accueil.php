@@ -27,8 +27,8 @@
 // New titles for table accueil, used during upgrade
 // Warning: This file must be encoded in ISO-8859-7, not UTF-8!
 
-if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
-	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
 	exit();
 }
 
