@@ -9,6 +9,12 @@
  *
  * @package phpMyAdmin-Engines
  */
+
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 class PMA_StorageEngine_bdb extends PMA_StorageEngine
 {
     /**

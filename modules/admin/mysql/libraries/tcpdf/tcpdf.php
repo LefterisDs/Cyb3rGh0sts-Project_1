@@ -88,6 +88,11 @@
  * @version 2.2.002
  */
 
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 /**
  * include configuration file
  * (Disabled in phpMyAdmin)

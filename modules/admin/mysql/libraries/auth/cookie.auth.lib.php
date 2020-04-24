@@ -9,6 +9,11 @@
  * @version $Id: cookie.auth.lib.php 12396 2009-05-07 07:56:13Z helmo $
  */
 
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 if (! defined('PHPMYADMIN')) {
     exit;
 }

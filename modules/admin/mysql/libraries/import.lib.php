@@ -6,6 +6,12 @@
  * @version $Id: import.lib.php 12178 2009-01-08 17:50:54Z lem9 $
  * @package phpMyAdmin
  */
+
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 if (! defined('PHPMYADMIN')) {
     exit;
 }

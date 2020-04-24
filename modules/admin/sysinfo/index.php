@@ -20,6 +20,11 @@
 // $Id: index.php,v 1.1.1.1 2006/01/10 15:02:11 adia Exp $
 //
 
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 // reassign HTTP variables (incase register_globals is off)
 if (!empty($_GET)) while(list($name, $value) = each($_GET)) $$name = $value;
 if (!empty($_POST)) while(list($name, $value) = each($_POST)) $$name = $value;

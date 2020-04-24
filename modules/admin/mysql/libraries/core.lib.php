@@ -38,6 +38,12 @@
  * @param   mixed   $type       var type or array of values to check against $var
  * @return  mixed   $var or $default
  */
+
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 function PMA_ifSetOr(&$var, $default = null, $type = 'similar')
 {
     if (! PMA_isValid($var, $type, $default)) {

@@ -18,6 +18,11 @@
  * @version    $Id: forms.inc.php 12268 2009-03-02 16:19:36Z lem9 $
  */
 
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 $forms = array();
 $forms['_config.php'] = array(
     'DefaultLang',

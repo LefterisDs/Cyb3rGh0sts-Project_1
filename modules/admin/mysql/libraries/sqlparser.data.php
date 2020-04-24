@@ -22,6 +22,12 @@
  * @version $Id: sqlparser.data.php 12432 2009-05-17 22:20:16Z helmo $
  * @package phpMyAdmin
  */
+
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 if (! defined('PHPMYADMIN')) {
     exit;
 }

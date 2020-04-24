@@ -8,6 +8,11 @@
  * @version    $Id: Form.class.php 11997 2008-11-24 11:36:33Z nijel $
  */
 
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 /**
  * Base class for forms, loads default configuration options, checks allowed
  * values etc.

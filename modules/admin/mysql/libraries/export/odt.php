@@ -6,6 +6,12 @@
  * @package phpMyAdmin-Export-ODT
  * @version $Id: odt.php 12349 2009-04-14 13:34:20Z helmo $
  */
+
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 if (! defined('PHPMYADMIN')) {
     exit;
 }

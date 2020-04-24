@@ -6,6 +6,12 @@
  * @version $Id: display_change_password.lib.php 12391 2009-05-04 16:32:16Z lem9 $
  * @package phpMyAdmin
  */
+
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 if (! defined('PHPMYADMIN')) {
     exit;
 }

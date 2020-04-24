@@ -15,6 +15,12 @@
  * @access public
  * @author  Michal Cihar (michal@cihar.com)
  */
+
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 function PMA_remove_request_vars(&$whitelist)
 {
     // do not check only $_REQUEST because it could have been overwritten

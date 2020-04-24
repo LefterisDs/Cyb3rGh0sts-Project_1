@@ -3,6 +3,12 @@
  * Font data for DejaVu Serif Bold.
  * @package com.tecnick.tcpdf
  */
+
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 $type='TrueTypeUnicode';
 $name='DejaVuSerif-Bold';
 $desc=array('Ascent'=>939,'Descent'=>-236,'CapHeight'=>939,'Flags'=>32,'FontBBox'=>'[-836 -423 1796 1235]','ItalicAngle'=>0,'StemV'=>120,'MissingWidth'=>600);

@@ -15,6 +15,12 @@
  * Path to changelog file, can be gzip compressed. Useful when you want to
  * have documentation somewhere else, eg. /usr/share/doc.
  */
+
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 define('CHANGELOG_FILE', './ChangeLog');
 
 /**

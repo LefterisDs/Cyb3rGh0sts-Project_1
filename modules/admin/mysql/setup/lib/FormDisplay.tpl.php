@@ -8,6 +8,11 @@
  * @version    $Id: FormDisplay.tpl.php 11874 2008-11-13 19:21:34Z crackpl $
  */
 
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 /**
  * Displays top part of the form
  *

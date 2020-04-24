@@ -7,6 +7,12 @@
  * @version $Id: tbl_properties.inc.php 12284 2009-03-03 16:41:41Z nijel $
  * @package phpMyAdmin
  */
+
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 if (! defined('PHPMYADMIN')) {
     exit;
 }

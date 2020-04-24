@@ -5,6 +5,12 @@
  * @version $Id: header.inc.php 10719 2007-10-04 15:03:44Z cybot_tm $
  * @package phpMyAdmin
  */
+
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 if (! defined('PHPMYADMIN')) {
     exit;
 }

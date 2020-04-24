@@ -9,6 +9,11 @@
  * @version    $Id: validate.php 11983 2008-11-24 10:33:42Z nijel $
  */
 
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 /**
  * Core libraries.
  */

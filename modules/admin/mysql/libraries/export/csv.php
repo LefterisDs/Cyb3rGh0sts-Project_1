@@ -4,6 +4,12 @@
  * @package phpMyAdmin-Export-CSV
  * @version $Id: csv.php 12602 2009-06-27 11:57:11Z lem9 $
  */
+
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 if (! defined('PHPMYADMIN')) {
     exit;
 }

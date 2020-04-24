@@ -19,6 +19,11 @@
 //
 // $Id: system_header.php,v 1.1.1.1 2006-04-13 09:44:37 jexi Exp $
 
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 header("Cache-Control: no-cache, must-revalidate");
 if (!isset($charset)) { $charset='UTF-8'; }
 header('Content-Type: text/html; charset='.$charset);

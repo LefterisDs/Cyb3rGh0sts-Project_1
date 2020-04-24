@@ -20,6 +20,12 @@
  * @param   string  pow function use, or false for auto-detect
  * @return  mixed  string or float
  */
+
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 function PMA_pow($base, $exp, $use_function = false)
 {
     static $pow_function = null;

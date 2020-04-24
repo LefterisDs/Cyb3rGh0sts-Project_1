@@ -9,6 +9,11 @@
  * @package phpMyAdmin
  */
 
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 /**
  * Gets the variables sent or posted to this script and displays the header
  */

@@ -25,6 +25,12 @@
  * @staticvar integer remember last calculated value
  * @return  integer  the output buffer mode
  */
+
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 function PMA_outBufferModeGet()
 {
     static $mode = null;

@@ -1,6 +1,11 @@
 <?php
 /* $Id: english-utf-8.inc.php 12645 2009-07-13 17:21:02Z lem9 $ */
 
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 $charset = 'utf-8';
 $text_dir = 'ltr'; // ('ltr' for left to right, 'rtl' for right to left)
 $number_thousands_separator = ',';

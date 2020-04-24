@@ -12,6 +12,11 @@
  * @version    $Id: config_info.inc.php 12040 2008-11-30 12:58:55Z nijel $
  */
 
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 if (!defined('PHPMYADMIN')) {
     exit;
 }

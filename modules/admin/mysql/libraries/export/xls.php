@@ -6,6 +6,12 @@
  * @version $Id: xls.php 11972 2008-11-24 09:14:31Z nijel $
  * @package phpMyAdmin-Export-XLS
  */
+
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 if (! defined('PHPMYADMIN')) {
     exit;
 }

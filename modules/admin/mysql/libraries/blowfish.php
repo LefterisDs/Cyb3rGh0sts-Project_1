@@ -17,6 +17,11 @@
  * @package horde.cipher
  */
 
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 // Change for phpMyAdmin by lem9:
 //class Horde_Cipher_blowfish extends Horde_Cipher {
 /**

@@ -61,6 +61,12 @@
  * </code>
  * @package phpMyAdmin
  */
+
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 class PMA_Message
 {
     const SUCCESS = 1; // 0001

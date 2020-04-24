@@ -42,6 +42,11 @@
  * @uses htmlspecialchars()
  */
 
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 /**
  * Gets a core script and starts output buffering work
  */

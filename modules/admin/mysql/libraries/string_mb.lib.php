@@ -26,6 +26,12 @@
  * @author  nijel
  * @todo rename to PM_STR_len()
  */
+
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 function PMA_strlen($string)
 {
     return mb_strlen($string);

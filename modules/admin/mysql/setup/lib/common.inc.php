@@ -8,6 +8,11 @@
  * @version    $Id: common.inc.php 12195 2009-01-18 18:55:00Z crackpl $
  */
 
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 /**
  * Do not include full common.
  * @ignore

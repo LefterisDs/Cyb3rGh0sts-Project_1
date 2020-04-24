@@ -1,6 +1,11 @@
 <?php
 /* $Id: spanish-utf-8.inc.php 12645 2009-07-13 17:21:02Z lem9 $ */
 
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 $charset = 'utf-8';
 $text_dir = 'ltr';
 $number_thousands_separator = ',';

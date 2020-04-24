@@ -32,6 +32,12 @@
  *
  * @author  nijel
  */
+
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 function PMA_generate_common_hidden_inputs($db = '', $table = '', $indent = 0, $skip = array())
 {
     if (is_array($db)) {

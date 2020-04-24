@@ -25,6 +25,12 @@
  * @param   string   character to check for
  * @return  boolean  whether the character is an alphanumeric one or not
  */
+
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 function PMA_STR_isAlnum($c)
 {
     return (PMA_STR_isUpper($c) || PMA_STR_isLower($c) || PMA_STR_isDigit($c));

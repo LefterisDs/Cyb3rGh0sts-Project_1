@@ -6,6 +6,12 @@
  * @package phpMyAdmin-Export-CSV
  * @version $Id: excel.php 12494 2009-05-25 08:11:32Z helmo $
  */
+
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 if (! defined('PHPMYADMIN')) {
     exit;
 }

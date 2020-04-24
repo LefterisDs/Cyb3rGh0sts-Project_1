@@ -14,6 +14,11 @@
  * @version    $Id: FormDisplay.class.php 12304 2009-03-24 12:56:58Z nijel $
  */
 
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 /**
  * Core libraries.
  */

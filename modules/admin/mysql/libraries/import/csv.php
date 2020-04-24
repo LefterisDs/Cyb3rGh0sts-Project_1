@@ -7,6 +7,12 @@
  * @version $Id: csv.php 12600 2009-06-27 11:41:51Z lem9 $
  * @package phpMyAdmin-Import
  */
+
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 if (! defined('PHPMYADMIN')) {
     exit;
 }

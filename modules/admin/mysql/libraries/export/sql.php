@@ -6,6 +6,12 @@
  * @package phpMyAdmin-Export-SQL
  * @version $Id: sql.php 12271 2009-03-03 10:12:17Z nijel $
  */
+
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 if (! defined('PHPMYADMIN')) {
     exit;
 }

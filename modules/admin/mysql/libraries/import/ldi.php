@@ -6,6 +6,12 @@
  * @version $Id: ldi.php 12047 2008-11-30 14:20:25Z nijel $
  * @package phpMyAdmin-Import
  */
+
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 if (! defined('PHPMYADMIN')) {
     exit;
 }

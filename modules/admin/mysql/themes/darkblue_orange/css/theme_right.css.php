@@ -8,6 +8,11 @@
  * @subpackage Darkblue_orange
  */
 
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 // unplanned execution path
 if (!defined('PMA_MINIMUM_COMMON')) {
     exit();

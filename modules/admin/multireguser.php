@@ -7,6 +7,11 @@
 *  A full copyright notice can be read in "/info/copyright.txt".
 * =========================================================================*/
 
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 define('SUFFIX_LEN', 4);
 
 $require_admin = TRUE;

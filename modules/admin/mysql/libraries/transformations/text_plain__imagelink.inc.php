@@ -5,6 +5,11 @@
  * @version $Id: text_plain__imagelink.inc.php 11973 2008-11-24 09:30:37Z nijel $
  */
 
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 /**
  *
  */

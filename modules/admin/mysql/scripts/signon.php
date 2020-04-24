@@ -12,6 +12,11 @@
  * @subpackage Example
  */
 
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 /* Was data posted? */
 if (isset($_POST['user'])) {
     /* Need to have cookie visible from parent directory */

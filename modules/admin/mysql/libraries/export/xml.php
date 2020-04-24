@@ -6,6 +6,12 @@
  * @version $Id: xml.php 12378 2009-04-19 12:24:45Z lem9 $
  * @package phpMyAdmin-Export-XML
  */
+
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 if (! defined('PHPMYADMIN')) {
     exit;
 }

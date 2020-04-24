@@ -31,6 +31,12 @@
  * @param bool          $isPostSource  tells whether $values are directly from POST request
  * @return bool|array
  */
+
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 function validate($validator_id, &$values, $isPostSource)
 {
     // find validators

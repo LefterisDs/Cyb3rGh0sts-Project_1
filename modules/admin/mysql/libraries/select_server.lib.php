@@ -21,6 +21,12 @@
  * @param   boolean $not_only_options   whether to include form tags or not
  * @param   boolean $ommit_fieldset     whether to ommit fieldset tag or not
  */
+
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 function PMA_select_server($not_only_options, $ommit_fieldset)
 {
     // Show as list?

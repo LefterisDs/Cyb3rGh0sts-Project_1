@@ -3,6 +3,12 @@
  * Font data for DejaVu Sans Bold.
  * @package com.tecnick.tcpdf
  */
+
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 $type='TrueTypeUnicode';
 $name='DejaVuSans-Bold';
 $desc=array('Ascent'=>928,'Descent'=>-236,'CapHeight'=>928,'Flags'=>32,'FontBBox'=>'[-1069 -388 1975 1123]','ItalicAngle'=>0,'StemV'=>120,'MissingWidth'=>600);

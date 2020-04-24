@@ -12,6 +12,11 @@
  * @version    $Id: index.lib.php 12333 2009-04-04 12:41:02Z helmo $
  */
 
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 if (!defined('PHPMYADMIN')) {
     exit;
 }

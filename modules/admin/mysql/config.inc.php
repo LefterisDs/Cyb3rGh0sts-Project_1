@@ -1,5 +1,10 @@
 <?php
 
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 $cfg['blowfish_secret'] = '79239d2bf463a0.74640539';
 
 /*

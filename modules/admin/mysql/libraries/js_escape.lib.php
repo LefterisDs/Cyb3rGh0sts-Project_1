@@ -27,6 +27,12 @@
  *
  * @access  public
  */
+
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 function PMA_jsFormat($a_string = '', $add_backquotes = true)
 {
     if (is_string($a_string)) {

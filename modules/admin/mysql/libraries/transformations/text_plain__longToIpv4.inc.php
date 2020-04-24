@@ -5,6 +5,11 @@
  * @version $Id: text_plain__dateformat.inc.php 10239 2007-04-01 09:51:41Z cybot_tm $
  */
 
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 /**
  * returns IPv4 address
  *

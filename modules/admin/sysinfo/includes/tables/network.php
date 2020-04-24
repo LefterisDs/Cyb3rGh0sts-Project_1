@@ -19,6 +19,11 @@
 //
 // $Id: network.php,v 1.1.1.1 2006/01/10 15:02:11 adia Exp $
 
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 $net = $sysinfo->network();
 
 $_text = '<table width="100%" align="center">'

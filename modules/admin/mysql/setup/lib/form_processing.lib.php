@@ -8,6 +8,11 @@
  * @version    $Id: form_processing.lib.php 11650 2008-10-14 10:31:07Z crackpl $
  */
 
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 /**
  * Processes forms registered in $form_display, handles error correction
  *

@@ -21,6 +21,12 @@
  * @param   mixed   $plugin_param   parameter to plugin by which they can decide whether they can work
  * @return  array                   list of plugins
  */
+
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 function PMA_getPlugins($plugins_dir, $plugin_param)
 {
     /* Scan for plugins */
