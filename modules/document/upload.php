@@ -36,8 +36,8 @@
     inputs for metadata. The actual uploading takes place at document.php
 ==============================================================================*/
 
-if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
-	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
 	exit();
 }
 

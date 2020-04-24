@@ -38,8 +38,8 @@ NOTE : if the free latex fonts furnished with this script don't work well (very 
 
 // NEW in 0.3 version : no more / at the end of $dirfonts and $dirimg
 
-if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
-	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
 	exit();
 }
 

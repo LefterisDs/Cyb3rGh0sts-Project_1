@@ -3,8 +3,8 @@
 // Message file for language en
 // Generated 2010-04-13 14:03:10
 
-if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
-	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
 	exit();
 }
 
