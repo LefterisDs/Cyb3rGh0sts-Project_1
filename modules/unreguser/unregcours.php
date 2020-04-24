@@ -38,6 +38,14 @@ $local_style = 'h3 { font-size: 10pt;} li { font-size: 10pt;} ';
 
 $tool_content = "";
 
+if (preg_match("/'/", $cid) or !isset($cid))
+    $cid = preg_replace("/'.*/", '',  $cid);
+
+if ( !mysql_fetch_array( db_query("SELECT cours_id FROM cours WHERE code = " . quote($cid)) ) ) {
+    header("Location: ../index.php");
+    exit();
+}
+    
 if (isset($_GET['cid']))
   $_SESSION['cid_tmp']=$cid;
 if(!isset($_GET['cid']))
