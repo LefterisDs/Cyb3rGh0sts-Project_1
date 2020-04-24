@@ -152,6 +152,16 @@ if ($total_topics > $topics_per_page) { // navigation
 }
 
 if(isset($topicnotify)) { // modify topic notification
+
+	if (preg_match("/[^0-9]/", $topic_id) or preg_match("/[^0-9]/", $cours_id)){
+		header("Location: ./index.php");
+		exit();
+	}
+
+	$topic_id = preg_replace("/[^0-9]/", '', $topic_id);
+	$cours_id = preg_replace("/[^0-9]/", '', $cours_id);
+	$forumnotify = preg_replace("/[^0-9]/", '', $topicnotify);
+
 	$rows = mysql_num_rows(db_query("SELECT * FROM forum_notify 
 		WHERE user_id = $uid AND topic_id = $topic_id AND course_id = $cours_id", $mysqlMainDb));
 	if ($rows > 0) {
