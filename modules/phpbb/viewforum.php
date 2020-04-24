@@ -94,10 +94,6 @@ $sql = "SELECT f.forum_type, f.forum_name
         FROM forums f
         WHERE forum_id = '$forum'";
 
-echo "SELECT f.forum_type, f.forum_name 
-      FROM forums f
-      WHERE forum_id = '$forum'";
-
 $result = db_query($sql, $currentCourseID);
 $myrow = mysql_fetch_array($result);
 
