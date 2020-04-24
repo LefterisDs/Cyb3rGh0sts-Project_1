@@ -103,12 +103,6 @@ $sql = "SELECT f.forum_type, f.forum_name
              AND (t.topic_id = $topic) 
              AND (t.forum_id = f.forum_id)";
     
-echo "SELECT f.forum_type, f.forum_name
-      FROM forums f, topics t 
-      WHERE    (f.forum_id = '$forum') 
-          AND (t.topic_id = $topic) 
-          AND (t.forum_id = f.forum_id)";
-
 if (!$result = db_query($sql, $currentCourseID)) {
 	$tool_content .= $langErrorConnectForumDatabase;
 	draw($tool_content, 2);
