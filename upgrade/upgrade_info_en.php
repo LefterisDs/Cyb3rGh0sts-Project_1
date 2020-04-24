@@ -1,4 +1,11 @@
-<?php header('Content-Type: text/html; charset=UTF-8');
+<?php 
+
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
+header('Content-Type: text/html; charset=UTF-8');
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>

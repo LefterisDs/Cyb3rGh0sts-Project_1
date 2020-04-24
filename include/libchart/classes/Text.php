@@ -25,6 +25,11 @@
     * @author   Jean-Marc Trémeaux (jm.tremeaux at gmail.com)
     */
 
+    if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+        header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+        exit();
+    }
+    
     class Text
     {
         var $HORIZONTAL_LEFT_ALIGN = 1;		// PHP4 doesn't support class constants

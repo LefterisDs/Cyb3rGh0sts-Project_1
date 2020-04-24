@@ -38,6 +38,12 @@
  * interface. In that case function drawPerso needs to be called.
  *
  */
+
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 include ('init.php');
 if ($is_adminOfCourse and isset($currentCourseID)) {
 	if (isset($_GET['hide']) and $_GET['hide'] == 0) {

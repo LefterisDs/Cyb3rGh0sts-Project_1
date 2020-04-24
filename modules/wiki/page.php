@@ -43,6 +43,12 @@
     @todo:
 ==============================================================================
 */
+
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
     $tlabelReq = 'CLWIKI__';
     require_once("../../include/lib/learnPathLib.inc.php");
     require_once("../../include/lib/textLib.inc.php");

@@ -32,6 +32,12 @@
  * @abstract 
  *
  */
+
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 header("Content-type: text/html; charset=UTF-8"); 
 $require_current_course = TRUE;
 include '../../include/baseTheme.php';

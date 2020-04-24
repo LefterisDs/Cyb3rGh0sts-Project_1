@@ -25,6 +25,11 @@
 // $Id: pclzip.lib.php,v 1.57 2009/08/11 14:59:47 vblavet Exp $
 // --------------------------------------------------------------------------------
 
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
   // ----- Constants
   if (!defined('PCLZIP_READ_BLOCK_SIZE')) {
     define( 'PCLZIP_READ_BLOCK_SIZE', 2048 );

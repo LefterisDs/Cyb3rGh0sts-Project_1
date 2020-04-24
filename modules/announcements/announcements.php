@@ -37,6 +37,11 @@
  * 4. Add new announcements
  */
 
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 $require_current_course = true;
 $require_help = true;
 $helpTopic = 'Announce';

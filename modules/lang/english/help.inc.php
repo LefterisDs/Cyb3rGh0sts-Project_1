@@ -3,6 +3,11 @@
 // Message file for language en
 // Generated 2010-04-13 14:03:10
 
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 $langWindowClose = "Close window";
 $langHDefault = 'Help non available';
 $langDefaultContent = '<p>There is no help text available for the platform page you are currently viewing.</p>';

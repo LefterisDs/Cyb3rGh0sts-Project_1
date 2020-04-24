@@ -3,6 +3,11 @@
 // Message file for language es
 // Generated 2010-04-13 14:03:10
 
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 $langEclass = "eClass Libre - Sistema de Administración del Curso";
 $langYes = "Si";
 $langNo = "No";

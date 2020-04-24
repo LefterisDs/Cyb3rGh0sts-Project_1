@@ -24,6 +24,11 @@
 *  			eMail: info@openeclass.org
 * =========================================================================*/
 
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
  // $Id: question_list_admin.inc.php,v 1.18 2009-09-21 10:49:59 jexi Exp $
 /**
  * This script allows to manage the question list

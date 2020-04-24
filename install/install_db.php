@@ -24,6 +24,11 @@
 *  			eMail: info@openeclass.org
 * =========================================================================*/
 
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 if (!defined('ECLASS_VERSION')) {
         exit;
 }
@@ -61,8 +66,6 @@ $charset_spec = 'DEFAULT CHARACTER SET=utf8';
 #
 # table `annonces`
 #
-
-
 db_query("CREATE TABLE annonces (
       `id` mediumint(11) NOT NULL auto_increment,
       `title` varchar(255) default NULL,

@@ -1,5 +1,10 @@
 <?php
 
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 // Do the queries to calculate usage between timestamps $start and $end
 // Returns a MySQL resource, where fetching rows results in:
 // duration, nom, prenom, user_id, am

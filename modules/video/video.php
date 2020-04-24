@@ -50,6 +50,11 @@ documents path.
 
 */
 
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Video';

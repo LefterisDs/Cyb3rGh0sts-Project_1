@@ -47,6 +47,12 @@
  * @package latexrender
  *
  */   
+
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
     // --------------------------------------------------------------------------------------------------
     // adjust this to match your system configuration    
     $latexrender_path = "/var/www/phpbb/latexrender";

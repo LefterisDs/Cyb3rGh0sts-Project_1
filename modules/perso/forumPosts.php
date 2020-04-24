@@ -47,6 +47,12 @@
  * @param string $type (data, html)
  * @return array
  */
+
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 function getUserForumPosts($param, $type)
 {
 	global $mysqlMainDb, $uid, $dbname, $currentCourseID;

@@ -24,6 +24,11 @@
 *  			eMail: info@openeclass.org
 * =========================================================================*/
 
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 function showQuestion($questionId, $onlyAnswers=false) {
 	global $tool_content, $picturePath, $webDir, $langNoAnswer, $langColumnA, $langColumnB, $langMakeCorrespond;
  	include_once "$webDir"."/modules/latexrender/latex.php";

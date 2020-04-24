@@ -56,6 +56,10 @@
 ==============================================================================
 */
 
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
 
 // Print a two-cell table row with that title, if the content is non-empty
 function table_row($title, $content)

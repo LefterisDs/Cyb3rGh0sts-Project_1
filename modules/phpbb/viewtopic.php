@@ -54,7 +54,7 @@
 */
 
 if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
-	header("Location: " . substr($_SERVER['PHP_SELF'], 0, -1));
+	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
 	exit();
 }
 

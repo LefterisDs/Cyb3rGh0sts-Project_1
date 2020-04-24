@@ -46,6 +46,11 @@
 ==============================================================================
 */
 
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 if( isset($cmd) && $cmd = "raw" )
 {
 	// change raw if value is a number between 0 and 100

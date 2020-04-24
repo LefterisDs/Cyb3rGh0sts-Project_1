@@ -1,4 +1,4 @@
-<?php session_start();
+<?php 
 /*========================================================================
 *   Open eClass 2.3
 *   E-learning and Course Management System
@@ -24,8 +24,8 @@
 *  			eMail: info@openeclass.org
 * =========================================================================*/
 /*
- * Index
- *
+* Index
+*
  * @version $Id: index.php,v 1.71 2009-12-15 12:45:02 jexi Exp $
  *
  * @abstract This file serves as the home page of eclass when the user
@@ -34,10 +34,17 @@
  */
 
 /***************************************************************
-*               HOME PAGE OF ECLASS		               *
-****************************************************************
-*/
+ *               HOME PAGE OF ECLASS		               *
+ ****************************************************************
+ */
 
+
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
+session_start();
 
 $sid = session_id();
 header("Set-Cookie: PHPSESSID=$sid; HttpOnly");

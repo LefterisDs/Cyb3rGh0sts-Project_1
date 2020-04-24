@@ -4,6 +4,11 @@
    * submitted in a $_POST parameter called 'content'
    */
 
+  if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+  }
+
   if(get_magic_quotes_gpc())
   {
     // trigger_error('Magic Quotes GPC is on, cleaning GPC.', E_USER_NOTICE);

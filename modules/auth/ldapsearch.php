@@ -33,6 +33,11 @@
 ==============================================================================
 */
 
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 include '../../include/baseTheme.php';
 include '../../include/sendMail.inc.php' ;
 require_once 'auth.inc.php';

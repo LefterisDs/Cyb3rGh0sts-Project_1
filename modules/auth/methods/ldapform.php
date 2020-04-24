@@ -23,6 +23,11 @@
 *						eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 if (!function_exists('ldap_connect'))		// Is php4-ldap really there?
 {
     $tool_content .= "<p align='center'><font color='red'><strong>$langLdapNotWork.</strong></font></p>";

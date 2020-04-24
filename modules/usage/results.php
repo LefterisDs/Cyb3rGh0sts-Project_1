@@ -32,6 +32,11 @@
  * Window - Preferences - PHPeclipse - PHP - Code Templates
  */
 
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 require_once '../../include/libchart/libchart.php';
 $usage_defaults = array (
     'u_stats_value' => 'visits',

@@ -45,6 +45,11 @@
 ==============================================================================
 */
 
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
     require_once dirname(__FILE__) . "/class.clarodbconnection.php";
 	require_once dirname(__FILE__) . "/class.wikiaccesscontrol.php";
 	require_once dirname(__FILE__) . "/class.wikistore.php";

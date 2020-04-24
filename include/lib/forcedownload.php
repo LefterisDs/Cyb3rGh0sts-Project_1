@@ -48,6 +48,11 @@
     
 ==============================================================================*/
 
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 function send_file_to_client($real_filename, $filename, $send_inline = false, $send_name = false)
 {
         if(!file_exists($real_filename))

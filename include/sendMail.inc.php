@@ -24,6 +24,11 @@
 *  			eMail: info@openeclass.org
 * =========================================================================*/
 
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 // Send a mail message, with the proper MIME headers and charset tag
 // From: address is always the platform administrator, and the
 // $from_address specified appears in the Reply-To: header

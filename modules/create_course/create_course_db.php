@@ -24,6 +24,11 @@
 *  			eMail: info@openeclass.org
 * =========================================================================*/
 
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 $charset_spec = 'DEFAULT CHARACTER SET=utf8';
 
 $cdb=mysql_query("CREATE DATABASE `$repertoire` $charset_spec");

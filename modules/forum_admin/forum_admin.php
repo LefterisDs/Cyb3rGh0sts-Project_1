@@ -24,6 +24,11 @@
 *  			eMail: info@openeclass.org
 * =========================================================================*/
 
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 /* @version $Id: forum_admin.php,v 1.24 2009-07-20 09:51:32 jexi Exp $
 @last update: 2006-12-19 by Evelthon Prodromou
 */

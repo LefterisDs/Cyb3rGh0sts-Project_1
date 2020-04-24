@@ -24,6 +24,11 @@
 *  			eMail: info@openeclass.org
 * =========================================================================*/
 
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 define('UNIQUE_ANSWER',	1);
 define('MULTIPLE_ANSWER', 2);
 define('FILL_IN_BLANKS', 3);

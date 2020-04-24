@@ -34,6 +34,11 @@
 ==============================================================================
 */
 
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 define ("BETACMSREPO", "betacmsrepo");
 
 define ("BRIDGE_HOST", "bridge_host");

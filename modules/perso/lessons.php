@@ -49,6 +49,12 @@
  * @param string $type (data, html)
  * @return mixed content
  */
+
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 function getUserLessonInfo($uid, $type)
 {
 	//	?$userID=$uid;

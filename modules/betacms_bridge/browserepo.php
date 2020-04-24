@@ -33,6 +33,12 @@
     @Comments:
 ==============================================================================
 */
+
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 $require_admin = TRUE;
 require_once("../../include/baseTheme.php");
 require_once("../admin/admin.inc.php");

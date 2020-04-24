@@ -23,6 +23,10 @@
 *				eMail: eclassadmin@gunet.gr
 ============================================================================*/
 
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
 
 // The function used to add a link or a category
 // type = add a link or add a category

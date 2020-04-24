@@ -54,7 +54,7 @@ existing (phpBB-based) to a new eclass forum :-(
 ==============================================================================
 */
 if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
-	header("Location: " . substr($_SERVER['PHP_SELF'], 0, -1));
+	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
 	exit();
 }
 
@@ -90,9 +90,13 @@ $tool_content .= "<li><a href='newtopic.php?forum=$forum'>$langNewTopic</a></li>
 * Retrieve and present data from course's forum
 */
 
-$sql = "SELECT f.forum_type, f.forum_name
-	FROM forums f
-	WHERE forum_id = '$forum'";
+$sql = "SELECT f.forum_type, f.forum_name 
+        FROM forums f
+        WHERE forum_id = '$forum'";
+
+echo "SELECT f.forum_type, f.forum_name 
+      FROM forums f
+      WHERE forum_id = '$forum'";
 
 $result = db_query($sql, $currentCourseID);
 $myrow = mysql_fetch_array($result);

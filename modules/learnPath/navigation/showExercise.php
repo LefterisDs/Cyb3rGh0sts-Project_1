@@ -42,6 +42,11 @@
 ==============================================================================
 */
 
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 $require_current_course = TRUE;
 require_once('../../exercice/exercise.class.php');
 require_once('../../exercice/question.class.php');

@@ -33,6 +33,12 @@
  * the user is enrolled in.
  *
  */
+
+if (preg_match('/.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
 $require_login = TRUE;
 $ignore_module_ini = true;
 
