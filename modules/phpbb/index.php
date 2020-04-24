@@ -83,6 +83,9 @@ include "functions.php";
 /*
 * First, some decoration
 */
+
+
+
 if ($is_adminOfCourse || $is_admin) {
 	$tool_content .= "<div id='operations_container'>
 	<ul id='opslist'>
@@ -116,7 +119,7 @@ if(isset($forumcatnotify)) { // modify forum category notification
 } elseif(isset($forumnotify)) { // modify forum notification
 
 
-	if (preg_match("/[^0-9]/", $forum_id) or preg_match("/[^0-9]/", $cours_id)){
+	if (preg_match("/[^0-9]/", $forum_id) or preg_match("/[^0-9]/", $cours_id) or preg_match("/[^0-9]/", $forum_id) or !isset($forum)){
 		header("Location: ./index.php");
 		exit();
 	}
@@ -124,6 +127,7 @@ if(isset($forumcatnotify)) { // modify forum category notification
 	$forum_id = preg_replace("/[^0-9]/", '', $forum_id);
 	$cours_id = preg_replace("/[^0-9]/", '', $cours_id);
 	$forumnotify = preg_replace("/[^0-9]/", '', $forumnotify);
+	$forum_id = preg_replace("/[^0-9]/", '', $forum_id);
 
 	$rows = mysql_num_rows(db_query("SELECT * FROM forum_notify 
 		WHERE user_id = $uid AND forum_id = $forum_id AND course_id = $cours_id", $mysqlMainDb));
