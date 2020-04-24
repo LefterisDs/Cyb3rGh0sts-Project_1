@@ -85,9 +85,8 @@ include("functions.php"); // application logic for phpBB
  * Actual code starts here
  *****************************************************************************/
 
-
 if (preg_match("/[^0-9]/", $forum) or !isset($forum)){
-		header("Location: ./newtopic.php");
+		header("Location: index.php");
 		exit();
 }
 
@@ -162,7 +161,7 @@ if (isset($submit) && $submit) {
 	$message = filter_var($message , FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
 	if (preg_match("/[^0-9]/", $forum) or !isset($forum)){
-		header("Location: ./viewforum.php");
+		header("Location: ./index.php");
 		exit();
 	}
 	
