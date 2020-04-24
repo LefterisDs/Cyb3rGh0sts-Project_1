@@ -85,6 +85,14 @@ include("functions.php"); // application logic for phpBB
  * Actual code starts here
  *****************************************************************************/
 
+
+if (preg_match("/[^0-9]/", $forum) or !isset($forum)){
+		header("Location: ./newtopic.php");
+		exit();
+}
+
+$forum = preg_replace("/[^0-9]/", '', $forum);
+
 $sql = "SELECT forum_name, forum_access, forum_type FROM forums
 	WHERE (forum_id = '$forum')";
 if (!$result = db_query($sql, $currentCourseID)) {
@@ -150,6 +158,17 @@ if (isset($submit) && $submit) {
 	if (isset($sig) && $sig) {
 		$message .= "\n[addsig]";
 	}
+
+	$message = filter_var($message , FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+	if (preg_match("/[^0-9]/", $forum) or !isset($forum)){
+		header("Location: ./viewforum.php");
+		exit();
+	}
+	
+	$forum = preg_replace("/[^0-9]/" , '' , $forum);
+	$subject   = preg_replace("/[^\p{Greek}a-zA-Z0-9\s]+/u", '', $subject);
+
 	$sql = "INSERT INTO topics (topic_title, topic_poster, forum_id, topic_time, topic_notify, nom, prenom)
 			VALUES (" . autoquote($subject) . ", '$uid', '$forum', '$time', 1, '$nom', '$prenom')";
 	$result = db_query($sql, $currentCourseID);
