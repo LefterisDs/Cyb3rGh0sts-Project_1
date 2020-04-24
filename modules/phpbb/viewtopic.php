@@ -89,6 +89,11 @@ if (isset($_GET['all'])) {
         $paging = true;
 }
 
+if (preg_match("/[^0-9]/", $forum) or preg_match("/[^0-9]/", $topic) or !isset($forum) or !isset($topic)){
+	header("Location: ./index.php");
+	exit();
+}
+
 $forum = preg_replace("/[^0-9]/" , '' , $forum);
 $topic = preg_replace("/[^0-9]/" , '' , $topic);
 

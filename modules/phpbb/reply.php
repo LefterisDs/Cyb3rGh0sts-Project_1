@@ -81,6 +81,14 @@ include_once("./config.php");
 include("functions.php");
 
 
+if (preg_match("/[^0-9]/", $forum) or preg_match("/[^0-9]/", $topic) or !isset($forum) or !isset($topic)){
+	header("Location: ./index.php");
+	exit();
+}
+
+$forum = preg_replace("/[^0-9]/", '',  $forum);
+$topic = preg_replace("/[^0-9]/", '' , $topic);
+
 
 if (isset($post_id) && $post_id) {
 	// We have a post id, so include that in the checks..
