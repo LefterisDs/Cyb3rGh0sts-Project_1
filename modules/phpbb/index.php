@@ -91,8 +91,21 @@ if ($is_adminOfCourse || $is_admin) {
 }
 
 if(isset($forumcatnotify)) { // modify forum category notification
-		$rows = mysql_num_rows(db_query("SELECT * FROM forum_notify 
-			WHERE user_id = $uid AND cat_id = $cat_id AND course_id = $cours_id", $mysqlMainDb));
+
+
+	if (preg_match("/[^0-9]/", $cat_id) or preg_match("/[^0-9]/", $cours_id)){
+		header("Location: ./index.php");
+		exit();
+	}
+
+	$cat_id = preg_replace("/[^0-9]/", '', $cat_id);
+	$cours_id = preg_replace("/[^0-9]/", '', $cours_id);
+	$forumnotify = preg_replace("/[^0-9]/", '', $forumnotify);
+
+
+	$rows = mysql_num_rows(db_query("SELECT * FROM forum_notify 
+		WHERE user_id = $uid AND cat_id = $cat_id AND course_id = $cours_id", $mysqlMainDb));
+
 		if ($rows > 0) {
 			db_query("UPDATE forum_notify SET notify_sent = '$forumcatnotify' 
 				WHERE user_id = $uid AND cat_id = $cat_id AND course_id = $cours_id", $mysqlMainDb);
@@ -101,6 +114,17 @@ if(isset($forumcatnotify)) { // modify forum category notification
 		cat_id = $cat_id, notify_sent = 1, course_id = $cours_id", $mysqlMainDb);
 	}
 } elseif(isset($forumnotify)) { // modify forum notification
+
+
+	if (preg_match("/[^0-9]/", $forum_id) or preg_match("/[^0-9]/", $cours_id)){
+		header("Location: ./index.php");
+		exit();
+	}
+
+	$forum_id = preg_replace("/[^0-9]/", '', $forum_id);
+	$cours_id = preg_replace("/[^0-9]/", '', $cours_id);
+	$forumnotify = preg_replace("/[^0-9]/", '', $forumnotify);
+
 	$rows = mysql_num_rows(db_query("SELECT * FROM forum_notify 
 		WHERE user_id = $uid AND forum_id = $forum_id AND course_id = $cours_id", $mysqlMainDb));
 	if ($rows > 0) {
