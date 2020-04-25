@@ -201,7 +201,7 @@ if ($is_adminOfCourse) {
 
 			// echo $id;
 			$res = db_query("SELECT *, (TO_DAYS(deadline) - TO_DAYS(NOW())) AS days FROM assignments WHERE id = '$id'");
-            echo "SELECT *, (TO_DAYS(deadline) - TO_DAYS(NOW())) AS days FROM assignments WHERE id = '$id'";
+            // echo "SELECT *, (TO_DAYS(deadline) - TO_DAYS(NOW())) AS days FROM assignments WHERE id = '$id'";
             
 			$row = mysql_fetch_array($res);
 
@@ -243,7 +243,7 @@ function show_submission($sid)
 	$nameTools = $langWorks;
 	$navigation[] = array("url"=>"work.php", "name"=> $langWorks);
 
-    echo "SELECT * FROM assignment_submit WHERE id = '$sid'";
+    // echo "SELECT * FROM assignment_submit WHERE id = '$sid'";
 	if ($sub = mysql_fetch_array(db_query("SELECT * FROM assignment_submit WHERE id = '$sid'"))) {
 
 		$tool_content .= "<p>$langSubmissionDescr".
@@ -1134,7 +1134,7 @@ function show_assignments($message = null)
 	global $tool_content, $m, $langNoAssign, $langNewAssign, $langCommands, $urlServer;
 
     $result = db_query("SELECT * FROM assignments ORDER BY id");
-    echo "SELECT * FROM assignments ORDER BY id";
+    // echo "SELECT * FROM assignments ORDER BY id";
 
 	if (isset($message)) {
 		$tool_content .="<p class='success_small'>$message</p><br/>";
@@ -1167,7 +1167,7 @@ cData;
 			// Check if assignement contains unevaluatde (incoming) submissions
 			$AssignementId = $row['id'];
 			$result_s = db_query("SELECT COUNT(*) FROM assignment_submit WHERE assignment_id='$AssignementId' AND grade=''");
-			echo "SELECT COUNT(*) FROM assignment_submit WHERE assignment_id='$AssignementId' AND grade=''";
+			// echo "SELECT COUNT(*) FROM assignment_submit WHERE assignment_id='$AssignementId' AND grade=''";
 			$row_s = mysql_fetch_array($result_s);
 			$hasUnevaluatedSubmissions = $row_s[0];
 			if(!$row['active']) {
