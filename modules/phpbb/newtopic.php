@@ -114,7 +114,6 @@ if (!does_exists($forum, $currentCourseID, "forum")) {
 	$tool_content .= $langErrorPost;
 }
 
-$message = filter_var($message , FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 $subject = filter_var($subject , FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
 if (isset($submit) && $submit) {
@@ -161,6 +160,8 @@ if (isset($submit) && $submit) {
 		$message .= "\n[addsig]";
 	}
 
+    $message = filter_var($message , FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    
 	if (preg_match("/[^0-9]/", $forum) or !isset($forum)){
 		header("Location: ./index.php");
 		exit();
@@ -172,8 +173,8 @@ if (isset($submit) && $submit) {
 	$sql = "INSERT INTO topics (topic_title, topic_poster, forum_id, topic_time, topic_notify, nom, prenom)
 			VALUES (" . autoquote($subject) . ", '$uid', '$forum', '$time', 1, '$nom', '$prenom')";
 	$result = db_query($sql, $currentCourseID);
-
-	$topic_id = mysql_insert_id();
+    
+    $topic_id = mysql_insert_id();
 	$sql = "INSERT INTO posts (topic_id, forum_id, poster_id, post_time, poster_ip, nom, prenom)
 			VALUES ('$topic_id', '$forum', '$uid', '$time', '$poster_ip', '$nom', '$prenom')";
 	if (!$result = db_query($sql, $currentCourseID)) {
