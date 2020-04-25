@@ -127,10 +127,9 @@ if (!does_exists($forum, $currentCourseID, "forum") || !does_exists($topic, $cur
 
 if (isset($submit) && $submit) {
 
-	// $message = trim($message);
+	$message = trim($message);
     // $message = preg_replace("/[^\p{Greek}a-zA-Z0-9\s]+/u", '', $message);
-    // $chatLine = filter_var($chatLine , FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-
+    
 	if (trim($message) == '') {
 		$tool_content .= $langEmptyMsg;
 		draw($tool_content, 2, 'phpbb', $head_content);
