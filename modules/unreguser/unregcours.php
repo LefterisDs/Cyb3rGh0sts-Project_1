@@ -38,8 +38,25 @@ $local_style = 'h3 { font-size: 10pt;} li { font-size: 10pt;} ';
 
 $tool_content = "";
 
-if (preg_match("/'/", $cid) or !isset($cid))
-    $cid = preg_replace("/'.*/", '',  $cid);
+if (preg_match("/'|\"/", $cid) or !isset($cid)) {
+
+    $tmp_url = urldecode($REQUEST_URI);
+    
+    $rep_header = "";
+    $token = strtok($tmp_url,"&#");
+    while ($token !== false) {
+        $token = preg_replace(array("/'.*/" , "/\".*/"), '',  $token);
+        
+        $rep_header .= trim($token);
+        $token = strtok("&#");
+        if ($token)
+            $rep_header .= "&";
+    }
+    
+    $cid = preg_replace(array("/'.*/" , "/\".*/"), '',  $cid);
+
+    header("Location: " . $rep_header);
+}
 
 if ( !mysql_fetch_array( db_query("SELECT cours_id FROM cours WHERE code = " . quote($cid)) ) ) {
     header("Location: ../index.php");
