@@ -25,7 +25,7 @@
 * =========================================================================*/
 
 if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
-	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+    header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
 	exit();
 }
 
@@ -34,16 +34,16 @@ include '../../include/baseTheme.php';
 
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <head>
-<meta http-equiv="refresh" content="30; url=<?= $_SERVER['PHP_SELF'] ?>" />
-<title>Chat messages</title>
-<style type="text/css">
+    <meta http-equiv="refresh" content="30; url=<?= $_SERVER['PHP_SELF'] ?>" />
+    <title>Chat messages</title>
+    <style type="text/css">
 span { color: #727266; }
 div { font-size: 90%; } 
 body { font-family: Verdana, Arial, Helvetica, sans-serif; }
 </style>
 </head>
 <body>
-<?
+    <?
 include '../../include/lib/textLib.inc.php';
 
 // support for math symbols
@@ -63,13 +63,13 @@ define('MESSAGE_LINE_NB',  40);
 define('MAX_LINE_IN_FILE', 80);
 
 if ($GLOBALS['language'] == 'greek')
-	$timeNow = date("d-m-Y / H:i",time());
+$timeNow = date("d-m-Y / H:i",time());
 else
-	$timeNow = date("Y-m-d / H:i",time());
+$timeNow = date("Y-m-d / H:i",time());
 
 if (!file_exists($fileChatName)) {
-	$fp = fopen($fileChatName, 'w')
-		or die ('<center>$langChatError</center>');
+    $fp = fopen($fileChatName, 'w')
+    or die ('<center>$langChatError</center>');
 	fclose($fp);
 }
 
@@ -77,7 +77,7 @@ if (!file_exists($fileChatName)) {
 
 // reset command
 if (isset($_GET['reset']) && $is_adminOfCourse) {
-	$fchat = fopen($fileChatName,'w');
+    $fchat = fopen($fileChatName,'w');
 	fwrite($fchat, $timeNow." ---- ".$langWashFrom." ---- ".$nick." --------\n");
 	fclose($fchat);
 	@unlink($tmpArchiveFile);
@@ -85,15 +85,15 @@ if (isset($_GET['reset']) && $is_adminOfCourse) {
 
 // store
 if (isset($_GET['store']) && $is_adminOfCourse) {
-	$saveIn = "chat.".date("Y-m-j-B").".txt";
+    $saveIn = "chat.".date("Y-m-j-B").".txt";
 	$chat_filename = date("YmdGis").randomkeys("8").".txt";
-
+    
 	buffer(implode('', file($fileChatName)), $tmpArchiveFile);
 	if (copy($tmpArchiveFile, $pathToSaveChat.$chat_filename)) {
-                $alert_div=$langSaveMessage;
-        } else {
-                $alert_div= $langSaveErrorMessage;
-        }
+        $alert_div=$langSaveMessage;
+    } else {
+        $alert_div= $langSaveErrorMessage;
+    }
 	echo $alert_div;
 	db_query("INSERT INTO document SET path='/$chat_filename', filename='$saveIn',
 		date=NOW(), date_modified=NOW()", $currentCourseID);
@@ -116,16 +116,17 @@ $fileContent  = file($fileChatName);
 
 $FileNbLine   = count($fileContent);
 $lineToRemove = $FileNbLine - MESSAGE_LINE_NB;
-if ($lineToRemove < 0) $lineToRemove = 0;
+if ($lineToRemove < 0) 
+    $lineToRemove = 0;
 $tmp = array_splice($fileContent, 0 , $lineToRemove);
 $fileReverse = array_reverse($fileContent);
 
 foreach ($fileReverse as $thisLine) {
-	$newline = preg_replace('/ : /', '</span> : ', $thisLine);
+    $newline = preg_replace('/ : /', '</span> : ', $thisLine);
 	if (strpos($newline, '</span>') === false) {
-		$newline .= '</span>';
+        $newline .= '</span>';
 	}
- 	echo '<div><span>', $newline, "</div>\n";
+    echo '<div><span>', $newline, "</div>\n";
 }
 
 echo "</body></html>\n";

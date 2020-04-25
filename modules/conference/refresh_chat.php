@@ -107,10 +107,13 @@ if (isset($_POST['store']) && $is_adminOfCourse) {
       'ADD NEW LINE' COMMAND
   -----------------------------*/
 if (isset($chatLine)) {
-	$chatLine=uft8html2utf8(utf8RawUrlDecode($chatLine));
-        $fchat = fopen($fileChatName,'a');
-        fwrite($fchat,$timeNow.' - '.$nick.' : '.stripslashes($chatLine)."\n");
-        fclose($fchat);
+    // $chatLine=uft8html2utf8(utf8RawUrlDecode($chatLine));
+
+    $chatLine = filter_var($chatLine , FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+    $fchat = fopen($fileChatName,'a');
+    fwrite($fchat,$timeNow.' - '.$nick.' : '.stripslashes($chatLine)."\n");
+    fclose($fchat);
 }
 
 /*==========================

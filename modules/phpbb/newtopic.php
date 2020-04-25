@@ -86,8 +86,8 @@ include("functions.php"); // application logic for phpBB
  *****************************************************************************/
 
 if (preg_match("/[^0-9]/", $forum) or !isset($forum)){
-		header("Location: index.php");
-		exit();
+    header("Location: index.php");
+    exit();
 }
 
 $forum = preg_replace("/[^0-9]/", '', $forum);
@@ -114,8 +114,11 @@ if (!does_exists($forum, $currentCourseID, "forum")) {
 	$tool_content .= $langErrorPost;
 }
 
+$message = filter_var($message , FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+$subject = filter_var($subject , FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
 if (isset($submit) && $submit) {
-	$subject = strip_tags($subject);
+	// $subject = strip_tags($subject);
 	if (trim($message) == '' || trim($subject) == '') {
 		$tool_content .= $langEmptyMsg;
 		draw($tool_content, 2, 'phpbb', $head_content);
@@ -158,15 +161,13 @@ if (isset($submit) && $submit) {
 		$message .= "\n[addsig]";
 	}
 
-	$message = filter_var($message , FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-
 	if (preg_match("/[^0-9]/", $forum) or !isset($forum)){
 		header("Location: ./index.php");
 		exit();
 	}
 	
 	$forum = preg_replace("/[^0-9]/" , '' , $forum);
-	$subject   = preg_replace("/[^\p{Greek}a-zA-Z0-9\s]+/u", '', $subject);
+    // $subject = preg_replace("/[^\p{Greek}a-zA-Z0-9\s]+/u", '', $subject);
 
 	$sql = "INSERT INTO topics (topic_title, topic_poster, forum_id, topic_time, topic_notify, nom, prenom)
 			VALUES (" . autoquote($subject) . ", '$uid', '$forum', '$time', 1, '$nom', '$prenom')";
