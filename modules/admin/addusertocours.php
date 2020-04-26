@@ -56,6 +56,12 @@ if (isset($search) && ($search=="yes")) {
 }
 // Register - Unregister students - professors to course
 if (isset($_POST['submit']))  {
+
+		if ($_REQUEST['token'] != $_SESSION['tok']){
+			echo 'Request error!';
+			die;
+		}
+	
         $regstuds = isset($_POST['regstuds'])? array_map('intval', $_POST['regstuds']): array();
         $regprofs = isset($_POST['regprofs'])? array_map('intval', $_POST['regprofs']): array();
         $reglist = implode(', ', array_merge($regstuds, $regprofs));
@@ -223,7 +229,7 @@ function reverseAll(cbList) {
 		<td><input type=submit value=\"".$langAcceptChanges."\" name=\"submit\" onClick=\"selectAll(this.form.elements[5],this.form.elements[6],true)\"></td>
 		<td>&nbsp;</td>
 		</tr></tbody></table>";
-	$tool_content .= "</form>";
+	$tool_content .= "<input type=\"hidden\" name=\"token\" value=".$_SESSION['tok']."></form>";
 
 }
 // If course selected go back to editcours.php
