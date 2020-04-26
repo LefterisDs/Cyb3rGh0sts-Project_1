@@ -133,9 +133,6 @@ if (!isset($submit)) {
     $userphone   = preg_replace("/[^0-9]/", '', $userphone);
     $usercomment = filter_var($usercomment , FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-    echo $email_form . " " . $uname . " " . $nom_form . " " . $prenom_form . " " . $userphone . " " . $usercomment ;
-
-    die;
     // check if there are empty fields
     if (empty($nom_form) or empty($prenom_form) or empty($userphone)
 	 or empty($usercomment) or empty($uname) or (empty($email_form))) {

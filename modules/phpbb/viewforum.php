@@ -82,7 +82,6 @@ if (!isset($forum)){
 $forum = intval($_GET['forum']);
 $forum = preg_replace("/[^0-9]/" , '' , $forum);
 
-
 $tool_content .= "<div id=\"operations_container\"><ul id=\"opslist\">";
 
 if ($is_adminOfCourse || $is_admin) {
@@ -158,15 +157,20 @@ if ($total_topics > $topics_per_page) { // navigation
 
 if(isset($topicnotify)) { // modify topic notification
 
-	if (preg_match("/[^0-9]/", $topic_id) or preg_match("/[^0-9]/", $cours_id) or !isset($topic_id) or !isset($cours_id)){
+    if (preg_match("/[^0-9]/", $topicnotify) or preg_match("/[^0-9]/", $topic_id) or preg_match("/[^0-9]/", $cours_id) or preg_match("/[^0-9]/", $forum)
+        or !isset($forum) or !isset($topic_id) or !isset($cours_id)){
 		header("Location: ./index.php");
 		exit();
 	}
 
-	$topic_id = preg_replace("/[^0-9]/", '', $topic_id);
-	$cours_id = preg_replace("/[^0-9]/", '', $cours_id);
-	$topicnotify = preg_replace("/[^0-9]/", '', $topicnotify);
-
+	$topic_id    = intval($_GET['topic_id']);
+	$cours_id    = intval($_GET['cours_id']);
+    $topicnotify = intval($_GET['topicnotify']);
+    
+	$topic_id    = preg_replace("/[^0-9]/", '', $topic_id);
+	$cours_id    = preg_replace("/[^0-9]/", '', $cours_id);
+    $topicnotify = preg_replace("/[^0-9]/", '', $topicnotify);
+    
 	$rows = mysql_num_rows(db_query("SELECT * FROM forum_notify 
 		WHERE user_id = $uid AND topic_id = $topic_id AND course_id = $cours_id", $mysqlMainDb));
 	if ($rows > 0) {

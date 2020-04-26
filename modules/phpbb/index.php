@@ -94,15 +94,20 @@ if ($is_adminOfCourse || $is_admin) {
 }
 
 if(isset($forumcatnotify)) { // modify forum category notification
+    
+    if (preg_match("/[^0-9]/", $forumcatnotify) or preg_match("/[^0-9]/", $cat_id) or preg_match("/[^0-9]/", $cours_id)
+        or !isset($cat_id) or !isset($cours_id)) {
 
-
-	if (preg_match("/[^0-9]/", $cat_id) or preg_match("/[^0-9]/", $cours_id)){
 		header("Location: ./index.php");
 		exit();
 	}
 
-	$cat_id = preg_replace("/[^0-9]/", '', $cat_id);
-	$cours_id = preg_replace("/[^0-9]/", '', $cours_id);
+	$cat_id      = intval($_GET['cat_id']);
+	$cours_id    = intval($_GET['cours_id']);
+    $forumnotify = intval($_GET['forumnotify']);
+
+	$cat_id      = preg_replace("/[^0-9]/", '', $cat_id);
+	$cours_id    = preg_replace("/[^0-9]/", '', $cours_id);
 	$forumnotify = preg_replace("/[^0-9]/", '', $forumnotify);
 
 
@@ -115,19 +120,24 @@ if(isset($forumcatnotify)) { // modify forum category notification
 	} else {
 		db_query("INSERT INTO forum_notify SET user_id = $uid,
 		cat_id = $cat_id, notify_sent = 1, course_id = $cours_id", $mysqlMainDb);
-	}
+    }
+    
 } elseif(isset($forumnotify)) { // modify forum notification
 
+    if (preg_match("/[^0-9]/", $forumnotify) or preg_match("/[^0-9]/", $forum_id) or preg_match("/[^0-9]/", $cours_id)
+        or !isset($forum_id) or !isset($cours_id)) {
 
-	if (preg_match("/[^0-9]/", $forum_id) or preg_match("/[^0-9]/", $cours_id) or preg_match("/[^0-9]/", $forum_id) or !isset($forum)){
 		header("Location: ./index.php");
 		exit();
 	}
 
-	$forum_id = preg_replace("/[^0-9]/", '', $forum_id);
-	$cours_id = preg_replace("/[^0-9]/", '', $cours_id);
+	$forum_id    = intval($_GET['forum_id']);
+	$cours_id    = intval($_GET['cours_id']);
+    $forumnotify = intval($_GET['forumnotify']);
+
+	$forum_id    = preg_replace("/[^0-9]/", '', $forum_id);
+	$cours_id    = preg_replace("/[^0-9]/", '', $cours_id);
 	$forumnotify = preg_replace("/[^0-9]/", '', $forumnotify);
-	$forum_id = preg_replace("/[^0-9]/", '', $forum_id);
 
 	$rows = mysql_num_rows(db_query("SELECT * FROM forum_notify 
 		WHERE user_id = $uid AND forum_id = $forum_id AND course_id = $cours_id", $mysqlMainDb));
