@@ -54,6 +54,12 @@ $all_set = register_posted_variables(array(
 $submit = isset($_POST['submit'])?$_POST['submit']:'';
 
 if($submit) {
+
+	if ($_REQUEST['token'] != $_SESSION['tok']){
+		echo 'Request error!';
+		die;
+	}
+
 	// register user
 	$depid = intval(isset($_POST['department'])?$_POST['department']: 0);
 	$proflanguage = isset($_POST['language'])?$_POST['language']:'';
@@ -213,7 +219,8 @@ $langEmail : $emailhelpdesk
 	</table>
 	<input type='hidden' name='rid' value='".@$id."'>
 	<input type='hidden' name='pstatut' value='$pstatut'>
-        <input type='hidden' name='auth' value='1' >
+		<input type='hidden' name='auth' value='1' >
+		<input type=\"hidden\" name=\"token\" value=".$_SESSION['tok'].">
 	</form>";
 	$tool_content .= "
 	<br />
