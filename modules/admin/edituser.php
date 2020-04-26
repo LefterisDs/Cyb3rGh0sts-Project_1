@@ -44,6 +44,8 @@ if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
 	exit();
 }
 
+
+
 // BASETHEME, OTHER INCLUDES AND NAMETOOLS
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
@@ -72,6 +74,8 @@ $authmethods = array("imap","pop3","ldap","db");
 $u_submitted = isset($_POST['u_submitted'])?$_POST['u_submitted']:'';
 if((!empty($u)) && ctype_digit($u) )	// validate the user id
 {
+	
+
 	$u = (int)$u;
 	if(empty($u_submitted)) // if the form was not submitted
 	{
@@ -210,7 +214,8 @@ $tool_content .= "
       <input type='hidden' name='u' value='$u' />
       <input type='hidden' name='u_submitted' value='1' />
       <input type='hidden' name='registered_at' value='".$info['registered_at']."' />
-      <input type='submit' name='submit_edituser' value='$langModify' />
+	  <input type='submit' name='submit_edituser' value='$langModify' />
+	  <input type=\"hidden\" name=\"token\" value=".$_SESSION['tok'].">
     </td>
   </tr>
   <tr>
@@ -218,6 +223,7 @@ $tool_content .= "
   </tr>
   </tbody>
   </table>
+  
 </form>";
 
 		$sql = mysql_query("SELECT nom, prenom, username FROM user WHERE user_id = '$u'");
@@ -292,6 +298,11 @@ $tool_content .= "
 			}
 		}
 	}  else { // if the form was submitted then update user
+
+		if ($_REQUEST['token'] != $_SESSION['tok']){
+			echo 'Request error!';
+			die;
+		}
 
 		// get the variables from the form and initialize them
 		$fname = isset($_POST['fname'])?$_POST['fname']:'';
