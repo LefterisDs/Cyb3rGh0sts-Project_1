@@ -73,6 +73,12 @@ $tool_content = "";
 ******************************************************************************/
 // Save new config.php
 if (isset($submit))  {
+
+  if ($_REQUEST['token'] != $_SESSION['tok']){
+    echo 'Request error!';
+    die;
+  }
+
 	// Make config directory writable
 	@chmod( "../../config",777 );
 	@chmod( "../../config", 0777 );
@@ -314,6 +320,7 @@ $tool_content .= "
   </tr>
   </tbody>
   </table>
+<input type=\"hidden\" name=\"token\" value=".$_SESSION['tok'].">
   </form>\n";
 	// Check if a backup file exists
   if (file_exists("../../config/config_backup.php")) {
