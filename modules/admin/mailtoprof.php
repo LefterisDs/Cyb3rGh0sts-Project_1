@@ -75,6 +75,12 @@ $tool_content = "";
 // Send email after form post
 if (isset($_POST['submit']) && ($_POST['body_mail'] != "") && ($_POST['submit'] == $langSend)) {
 	// Where to send the email
+
+	if ($_REQUEST['token'] != $_SESSION['tok']){
+		echo 'Request error!';
+		die;
+	}
+
 	if ($_POST['sendTo'] == "0") {
 		// All users
 		$sql = mysql_query("SELECT DISTINCT email FROM user");
@@ -125,6 +131,7 @@ $langEmail : $emailhelpdesk
   </tr>
   </tbody>
   </table>
+  <input type=\"hidden\" name=\"token\" value=".$_SESSION['tok']."></form>
 </form>";
 
 }
