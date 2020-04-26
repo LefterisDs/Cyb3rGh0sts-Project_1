@@ -45,6 +45,11 @@ if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
 	exit();
 }
 
+if ($_REQUEST['token'] != $_SESSION['tok']){
+    echo 'Request error!';
+    die;
+}
+
 // BASETHEME, OTHER INCLUDES AND NAMETOOLS
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
@@ -53,13 +58,13 @@ $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
 $tool_content = "";
 
 // get the incoming values and initialize them
-$u = isset($_GET['u'])? intval($_GET['u']): false;
-$c = isset($_GET['c'])? intval($_GET['c']): false;
+$u    = isset($_GET['u'])? intval($_GET['u']): false;
+$c    = isset($_GET['c'])? intval($_GET['c']): false;
 $doit = isset($_GET['doit']);
 
-$u_account = $u? uid_to_username($u): '';
+$u_account  = $u? uid_to_username($u): '';
 $u_realname = $u? uid_to_name($u): '';
-$u_statut = get_uid_statut($u);
+$u_statut   = get_uid_statut($u);
 $t = 0;
 
 if (!$doit) {
@@ -69,10 +74,18 @@ if (!$doit) {
         }
         $tool_content .= ";</p>
                 <ul>
-                <li>$langYes: <a href=\"unreguser.php?u=".htmlspecialchars($u)."&c=".htmlspecialchars($c)."&doit=yes\">$langDelete</a><br>&nbsp;</li>
+                <li>$langYes: <a value=".$_SESSION['tok']." href=\"unreguser.php?u=".htmlspecialchars($u)."&c=".htmlspecialchars($c)."&doit=yes\">$langDelete</a><br>&nbsp;</li>
                 <li>$langNo: <a href=\"edituser.php?u=".htmlspecialchars($u)."\">$langBack</a></li>
                 </ul>";
 } else {
+
+    	// <input type=\"hidden\" name=\"token\" value=".$_SESSION['tok'].">
+
+        if ($_REQUEST['token'] != $_SESSION['tok']){
+            echo 'Request error!';
+            die;
+        }
+
         if (!$c) {
                 if ($u == 1) {
                         $tool_content .= $langTryDeleteAdmin;
