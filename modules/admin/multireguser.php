@@ -26,6 +26,13 @@ $error = '';
 $acceptable_fields = array('first', 'last', 'email', 'id', 'phone', 'username');
 
 if (isset($_POST['submit'])) {
+
+
+        if ($_REQUEST['token'] != $_SESSION['tok']){
+                echo 'Request error!';
+                die;
+        }
+
         $send_mail = isset($_POST['send_mail']) && $_POST['send_mail'];
         $unparsed_lines = '';
         $new_users_info = array();
@@ -149,6 +156,7 @@ if (isset($_POST['submit'])) {
     <td><input type='submit' name='submit' value='$langSubmit' /></td>
 </tr>
 </table>
+<input type=\"hidden\" name=\"token\" value=".$_SESSION['tok'].">
 </form>";
 }
 
