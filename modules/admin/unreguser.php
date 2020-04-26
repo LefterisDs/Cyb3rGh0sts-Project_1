@@ -45,11 +45,6 @@ if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
 	exit();
 }
 
-if ($_REQUEST['token'] != $_SESSION['tok']){
-    echo 'Request error!';
-    die;
-}
-
 // BASETHEME, OTHER INCLUDES AND NAMETOOLS
 $require_admin = TRUE;
 include '../../include/baseTheme.php';
@@ -74,14 +69,14 @@ if (!$doit) {
         }
         $tool_content .= ";</p>
                 <ul>
-                <li>$langYes: <a value=".$_SESSION['tok']." href=\"unreguser.php?u=".htmlspecialchars($u)."&c=".htmlspecialchars($c)."&doit=yes\">$langDelete</a><br>&nbsp;</li>
+                <li>$langYes: <a href=\"unreguser.php?u=".intval($u)."&token=".$_SESSION['tok']."&c=".intval($c)."&doit=yes\">$langDelete</a>
+
+                <br>&nbsp;</li>
                 <li>$langNo: <a href=\"edituser.php?u=".htmlspecialchars($u)."\">$langBack</a></li>
                 </ul>";
 } else {
 
-    	// <input type=\"hidden\" name=\"token\" value=".$_SESSION['tok'].">
-
-        if ($_REQUEST['token'] != $_SESSION['tok']){
+        if ($token != $_SESSION['tok']){
             echo 'Request error!';
             die;
         }
