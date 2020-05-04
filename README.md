@@ -42,7 +42,7 @@ else {
 
 β)Σε κάποια άλλα σημεία όπως στην τηλεσυνεργασία δεν θέλαμε να διαγράψουμε τελείως το μήνυμα του χρήστη σε περίπτωση
 που έκανε xss παρά θέλαμε να διατηρηθεί το μήνυμα χωρίς να εκτελεστεί . Αυτό το πετύχαμε με το sanitization , δηλαδή\
-```$chatLine = filter_var($chatLine , FILTER_SANITIZE_FULL_SPECIAL_CHARS);```
+```$chatLine = filter_var($chatLine , FILTER_SANITIZE_FULL_SPECIAL_CHARS);```\
 πράγμα που έκανε sanitize τους ειδικούς χαρακτήρες , οπότε ακόμα και αν ο χρήστης έγραφε <script>alert(...)</script>
 θα εκτυπωνώταν στο τσατ το <script>alert(...)</script> , αλλά δεν θα εκτελείτο .
 
