@@ -118,4 +118,11 @@ $n=25;
 $fakepwd = get_rand_pwd($n);
 $_SESSION['tok'] = $fakepwd;
 ```
+Tέλος κάνοντας submit την φόρμα ελέγχουμε αν το token της φόρμας είναι ίδιο με το token του session όπως παρακάτω :
+```
+if ($_REQUEST['token'] != $_SESSION['tok']){
+	echo 'Request error!';
+	die;
+}
+```
 - Να εξηγεί τι είδους επιθέσεις δοκιμάσατε στο αντίπαλο site και αν αυτές πέτυχαν.
