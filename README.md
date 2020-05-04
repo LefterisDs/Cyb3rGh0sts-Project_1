@@ -22,7 +22,7 @@
 
 Άμυνες σε XSS :  
 α)Σε αρκετά σημεία όπως στο modules/agenda/myagenda.php?month=6&year=2020<script>xss</script>
-χρησιμοποιήσαμε filtering , δηλαδή αν πάρουμε κάτι διαφορετικό εκτός από αριθμό στο year του URL , επιστρέφουμε τον 
+χρησιμοποιήσαμε cut filtering , δηλαδή αν πάρουμε κάτι διαφορετικό εκτός από αριθμό στο year του URL , επιστρέφουμε τον 
 χρήστη στο αρχικό modules/agenda/myagenda.php , με τον παρακάτω τρόπο
 
 if (preg_match("/[^0-9]/", $year) or preg_match("/[^0-9]/" , $month) ) {
@@ -57,7 +57,13 @@ if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
 }
 
 Άμυνες σε SQLi :
-α)
+α)Σε αρκετά σημεία όπως στο modules/auth/contactadmin.php?userid=1
+χρησιμοποιήσαμε cut filtering , δηλαδή αν πάρουμε κάτι διαφορετικό εκτός από αριθμό στο userid του URL , επιστρέφουμε τον 
+χρήστη στο αρχικό index.php , με τον παρακάτω τρόπο
+if (preg_match("/[^0-9]/", $userid)){
+	header("Location: ../index.php");
+	exit();
+}
 
 
 - Να εξηγεί τι είδους επιθέσεις δοκιμάσατε στο αντίπαλο site και αν αυτές πέτυχαν.
