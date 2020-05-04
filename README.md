@@ -32,7 +32,7 @@ if (preg_match("/[^0-9]/", $year) or preg_match("/[^0-9]/" , $month) ) {\
 else {\
   $year = preg_replace("/[^0-9]/" , '' , $year);\
   $month = preg_replace("/[^0-9]/", '' , $month);\
-}\
+}
 
 β)Σε κάποια άλλα σημεία όπως στην τηλεσυνεργασία δεν θέλαμε να διαγράψουμε τελείως το μήνυμα του χρήστη σε περίπτωση
 που έκανε xss παρά θέλαμε να διατηρηθεί το μήνυμα χωρίς να εκτελεστεί . Αυτό το πετύχαμε με το sanitization , δηλαδή\
@@ -45,7 +45,7 @@ $email = filter_var($email , FILTER_SANITIZE_EMAIL);\
 $uname = preg_replace("/[^A-Za-z0-9]/", '', $uname);\
 $nom_form = preg_replace("/[^A-Za-z0-9]/", '', $nom_form);\
 $prenom_form = preg_replace("/[^A-Za-z0-9]/", '', $prenom_form);\
-$am = preg_replace("/[^0-9]/", '', $am);\
+$am = preg_replace("/[^0-9]/", '', $am);
 
 δ)Τέλος αν για κάποιο λόγο κάποιος έγραφε στο URL πχ http://cybergh0sts.chatzi.org/index.php/""> μπορούσε
 να κάνει GET request στο site και να τυπώσει κάτι , οπότε μπορούσε να κάνει και xss . Προκειμένου να το διορθώσουμε
@@ -54,7 +54,7 @@ $am = preg_replace("/[^0-9]/", '', $am);\
 if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){\
 	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");\
 	exit();\
-}\
+}
 
 Άμυνες σε SQLi :\
 α)Σε αρκετά σημεία όπως στο modules/auth/contactadmin.php?userid=1
@@ -63,7 +63,15 @@ if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){\
 if (preg_match("/[^0-9]/", $userid)){\
 	header("Location: ../index.php");\
 	exit();\
+}
+
+β)Σε άλλα σημεία χρησιμοποιήσαμε το full filtering σε συνδυασμό με το preg_match δηλαδή :\
+if (preg_match("/[^0-9]/", $id)){\
+	unset($id);\
+	show_student_assignments();\
 }\
+else {\
+	$id = preg_replace("/[^0-9]/", '', $id);
 
 
 - Να εξηγεί τι είδους επιθέσεις δοκιμάσατε στο αντίπαλο site και αν αυτές πέτυχαν.
