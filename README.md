@@ -39,8 +39,12 @@ $chatLine = filter_var($chatLine , FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 πράγμα που έκανε sanitize τους ειδικούς χαρακτήρες , οπότε ακόμα και αν ο χρήστης έγραφε <script>alert(...)</script>
 θα εκτυπωνώταν στο τσατ το <script>alert(...)</script> , αλλά δεν θα εκτελείτο .
 
-
-
+γ)Άλλες φορές χρησιμοποιήσαμε το απλό filtering δηλαδή
+$email = filter_var($email , FILTER_SANITIZE_EMAIL);
+$uname = preg_replace("/[^A-Za-z0-9]/", '', $uname);
+$nom_form = preg_replace("/[^A-Za-z0-9]/", '', $nom_form);
+$prenom_form = preg_replace("/[^A-Za-z0-9]/", '', $prenom_form);
+$am = preg_replace("/[^0-9]/", '', $am);
 
 
 - Να εξηγεί τι είδους επιθέσεις δοκιμάσατε στο αντίπαλο site και αν αυτές πέτυχαν.
