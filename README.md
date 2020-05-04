@@ -72,6 +72,14 @@ if (preg_match("/[^0-9]/", $id)){\
 }\
 else {\
 	$id = preg_replace("/[^0-9]/", '', $id);
+	
+ή πχ στο upgrade/upgrade_functions.php\
+if (preg_match("/[^a-zA-Z]/", $username) ){\
+	header("Location: " . $_SERVER['PHP_SELF']);\
+	exit();\
+}
+
+$username = preg_replace("/[^a-zA-Z]/", '',  $username);
 
 
 - Να εξηγεί τι είδους επιθέσεις δοκιμάσατε στο αντίπαλο site και αν αυτές πέτυχαν.
