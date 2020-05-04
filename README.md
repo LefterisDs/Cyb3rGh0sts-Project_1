@@ -47,5 +47,17 @@ $nom_form = preg_replace("/[^A-Za-z0-9]/", '', $nom_form);
 $prenom_form = preg_replace("/[^A-Za-z0-9]/", '', $prenom_form);
 $am = preg_replace("/[^0-9]/", '', $am);
 
+δ)Τέλος αν για κάποιο λόγο κάποιος έγραφε στο URL πχ http://cybergh0sts.chatzi.org/index.php/""> μπορούσε
+να κάνει GET request στο site και να τυπώσει κάτι , οπότε μπορούσε να κάνει και xss . Προκειμένου να το διορθώσουμε
+αυτό κόβαμε οποιουσδήποτε χαρακτήρες υπάρχουν μετά το .php με τον παρακάτω κώδικα , ο οποίος προστέθηκε πάνω πάνω 
+σε κάθε αρχείο 
+if (preg_match('/\.php\//' , $_SERVER['PHP_SELF'])){
+	header("Location: " . preg_replace('/\.php.*/' , '' , $_SERVER['PHP_SELF']) . ".php");
+	exit();
+}
+
+Άμυνες σε SQLi :
+α)
+
 
 - Να εξηγεί τι είδους επιθέσεις δοκιμάσατε στο αντίπαλο site και αν αυτές πέτυχαν.
