@@ -97,7 +97,7 @@ $username = preg_replace("/[^a-zA-Z]/", '',  $username);
 
 Άμυνες σε CSRF :\
 α)Για την άμυνα ενάντια σε csrf πάνω σε φόρμες χρησιμοποιήσαμε tokens τα οποία τα βάζαμε ως hidden element της φόρμας δηλαδή\
-<input type=\"hidden\" name=\"token\" value=".$_SESSION['tok'].">\
+```<input type=\"hidden\" name=\"token\" value=".$_SESSION['tok'].">```
 Για την δημιουργία του token φτιάξαμε την παρακάτω συνάρτηση που ανάλογα με το n παράγει μια τυχαία συμβολοσειρά με μήκος n
 ```
 function get_rand_pwd($n) {
